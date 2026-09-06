@@ -1,0 +1,163 @@
+
+.pesquisa-container {
+  width: 100%;
+  padding: 20px 24px;
+}
+
+.barra-pesquisa {
+  position: relative;
+  width: 100%;
+  max-width: 990px;
+  margin: 0 auto 20px auto;
+  box-sizing: border-box;
+}
+
+.icone-pesquisa {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #b7b7b7;
+  border-radius: 50%;
+  transform: translateY(-60%);
+  pointer-events: none;
+}
+
+.icone-pesquisa::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  width: 8px;
+  height: 2px;
+  background: #b7b7b7;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+.barra-pesquisa input {
+  width: 100%;
+  height: 48px;
+  padding: 0 20px 0 52px;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  outline: none;
+  background: #1c1c1c;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.barra-pesquisa input::placeholder {
+  color: #777777;
+  opacity: 1;
+}
+
+.barra-pesquisa input:focus {
+  border-color: #4b3f8a;
+  box-shadow: 0 0 0 3px rgba(75, 63, 138, 0.25);
+}
+
+
+
+/* FILTROS */
+.filtros {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 990px;
+  min-height: 58px;
+  margin: 0 auto;
+  padding: 7px 20px;
+  border-bottom: 1px solid #414141;
+  border-radius: 10px;
+  background: #111111;
+  gap: 12px;
+}
+
+.filtro {
+  padding: 8px 21px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #f1f1f1;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filtro:hover {
+  background: #272727;
+}
+
+.filtro.ativo {
+  background: #2a2450;
+  color: #ffffff;
+}
+
+.filtro svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+
+/* DESTAQUE */
+.destaque {
+  max-width: 1200px;
+  margin: 0 auto 50px;
+  padding: 0 24px;
+}
+
+.destaque h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #2c2c2c;
+  margin-bottom: 24px;
+}
+
+
+
+@media (max-width: 700px) {
+  .pesquisa-container {
+    padding-inline: 18px;
+  }
+
+  .filtros {
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin-top: 24px;
+    padding-inline: 10px;
+    scrollbar-width: none;
+  }
+
+  .filtros::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filtro {
+    flex: 0 0 auto;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .destaque {
+    padding: 0 16px;
+  }
+
+  .destaque h2 {
+    font-size: 1.5rem;
+  }
+
+
+}
