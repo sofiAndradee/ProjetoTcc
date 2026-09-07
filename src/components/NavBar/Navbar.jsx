@@ -46,7 +46,7 @@ export default function Navbar() {
                 height="18"
                 fill="none"
                 stroke="#ffffff"
-                strokeWidth="2"
+                
                 strokeLinecap="round"
               >
                 <circle cx="11" cy="11" r="7" />
@@ -93,7 +93,7 @@ export default function Navbar() {
           </li>
 
           <li className="nav-item">
-            <Link to="/">Locais</Link>
+            <Link to="/Local">Locais</Link>
           </li>
 
           <li className="nav-item">
