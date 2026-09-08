@@ -118,8 +118,8 @@
 
 .pill {
   flex: 1 1 200px;
-  background: #02002465;
-  background: radial-gradient(circle, rgba(2, 0, 36, 0.459) 0%, rgba(9, 9, 121, 0.514) 51%);
+  background: #02002434;
+  background: radial-gradient(circle, rgba(2, 0, 36, 0.459) 0%, rgba(9, 9, 121, 0.29) 51%);
   border: 1.2px solid var(--pill-border);
   border-radius: 999px;
   padding: 16px 26px;
@@ -135,7 +135,7 @@
 .pill:hover {
   transform: translateY(-2px);
   background: #000000b3;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.63) 0%, rgba(5, 5, 61, 0.625) 51%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.538) 0%, rgba(5, 5, 61, 0.456) 51%);
 
 }
  
@@ -143,6 +143,67 @@
   width: 26px;
   height: 26px;
   flex-shrink: 0;
+}
+
+.destaque {
+
+  max-width: 1200px;
+  margin: 0 auto 50px;
+  padding: 0 24px;
+}
+
+.destaque h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #2c2c2c;
+  margin-bottom: 24px;
+}
+.evento-card {
+  border: 2px solid transparent;
+  background: var(--bg-card);
+  transition: border-color 0.2s ease;
+  border-radius: 16px;
+  padding: 28px 32px;
+}
+
+.evento-card:hover {
+  background-color: #161616;
+  border: solid #43009A;
+}
+
+.tag {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--accent-pink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.evento-card h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.evento-card p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  max-width: 700px;
+  margin-bottom: 18px;
+}
+
+.date-tag {
+  display: inline-block;
+  background: rgba(77, 163, 255, 0.15);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
 }
 
 
@@ -215,4 +276,15 @@
   .pill {
     flex: 1 1 100%;
   }
+
+  
+
+  .destaque {
+    padding: 0 16px;
+  }
+
+  .destaque h2 {
+    font-size: 1.5rem;
+  }
 }
+

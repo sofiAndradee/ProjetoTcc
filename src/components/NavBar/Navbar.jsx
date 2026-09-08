@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom"
 import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
-import local from "../../pages/Local/Local";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
@@ -25,7 +24,7 @@ export default function Navbar() {
             </li>
 
             <li className="nav-item">
-              <Link to="" className="nav-link">Notícias</Link>
+              <Link to="/Noticia" className="nav-link">Notícias</Link>
             </li>
           </ul>
         </div>
@@ -97,7 +96,7 @@ export default function Navbar() {
           </li>
 
           <li className="nav-item">
-            <Link to="/">Notícias</Link>
+            <Link to="/Noticia">Notícias</Link>
           </li>
         </ul>
       </div>

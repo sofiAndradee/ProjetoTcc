@@ -1,0 +1,25 @@
+
+.noticia {
+  max-width: 1200px;
+  margin: 50px auto 50px ;
+  padding: 0 24px;
+}
+
+.noticia h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #2c2c2c;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 480px) {
+
+  .noticia {
+    padding: 0 16px;
+  }
+
+  .noticia h2 {
+    font-size: 1.5rem;
+  }
+}

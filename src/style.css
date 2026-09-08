@@ -52,67 +52,6 @@ img {
  
 
 /* DESTAQUE */
-.destaque {
-
-  max-width: 1200px;
-  margin: 0 auto 50px;
-  padding: 0 24px;
-}
-
-.destaque h2 {
-  font-size: 1.9rem;
-  font-weight: 800;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #2c2c2c;
-  margin-bottom: 24px;
-}
-
-.destaque-card {
-  border: 2px solid transparent;
-  background: var(--bg-card);
-  transition: border-color 0.2s ease;
-  border-radius: 16px;
-  padding: 28px 32px;
-}
-
-.destaque-card:hover {
-  background-color: #161616;
-  border: solid #43009A;
-}
-
-.tag {
-  display: inline-block;
-  background: rgba(255, 95, 162, 0.15);
-  color: var(--accent-pink);
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 999px;
-  margin-bottom: 14px;
-}
-
-.destaque-card h3 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-bottom: 12px;
-}
-
-.destaque-card p {
-  color: var(--text-dim);
-  font-size: 0.95rem;
-  max-width: 700px;
-  margin-bottom: 18px;
-}
-
-.date-tag {
-  display: inline-block;
-  background: rgba(77, 163, 255, 0.15);
-  color: var(--accent-blue);
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 999px;
-}
 
 
 /* RESPONSIVE */
@@ -123,25 +62,5 @@ img {
   }
 }
 
-@media (max-width: 768px){
 
 
-  .destaque-card {
-    padding: 22px;
-  }
-}
-
-@media (max-width: 480px) {
-  
-
-
-  .destaque {
-    padding: 0 16px;
-  }
-
-  .destaque h2 {
-    font-size: 1.5rem;
-  }
-
-
-}

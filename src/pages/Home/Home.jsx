@@ -2,7 +2,7 @@ import Navbar from "../../components/NavBar/Navbar"
 import Footer from "../../components/Footer/Footer"
 import imagemHero from "../../assets/WhatsApp Image 2026-03-26 at 23.54.54 (2).jpeg"
 import Karate from "../../assets/Karate.png"
-
+import CardEvento from "../../components/CardEvento/CardEvento"
 import "./HomeStyle.css"
 
 
@@ -127,7 +127,12 @@ function Home() {
                     </div>
 
                 </section>
-
+                
+                <section className="destaque">
+                
+                <CardEvento></CardEvento>
+               
+                </section>
             </main>
             <Footer />
         </>
