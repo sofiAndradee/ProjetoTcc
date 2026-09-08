@@ -127,12 +127,7 @@ function Home() {
                     </div>
 
                 </section>
-                
-                <section className="destaque">
-                
-                <CardEvento></CardEvento>
-               
-                </section>
+
             </main>
             <Footer />
         </>
