@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
+
+
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+    const { pathname } = useLocation();
+
+   const estaNoLogin = pathname === "/Login";
   return (
     <header>
       <nav className="nav-bar">
@@ -26,6 +32,9 @@ export default function Navbar() {
             <li className="nav-item">
               <Link to="/Noticia" className="nav-link">Notícias</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/Noticia" className="nav-link">Quem somos</Link>
+            </li>
           </ul>
         </div>
  
@@ -45,7 +54,7 @@ export default function Navbar() {
                 height="18"
                 fill="none"
                 stroke="#ffffff"
-                
+                strokeWidth="2"
                 strokeLinecap="round"
               >
                 <circle cx="11" cy="11" r="7" />
@@ -63,12 +72,19 @@ export default function Navbar() {
         
 
         
+
+       {
+        !estaNoLogin &&(
+          <Link className="btn-cadastro"  to="/Login" >cadastre</Link>
+        )
+       }
+      
         
-        {/* PERFIL */}
+        {/* PERFIL
         <div className="avatar">
           SR
         </div>
-
+           */}
 
         {/* MENU HAMBÚRGUER */}
         <div className="mobile-menu-icon">
