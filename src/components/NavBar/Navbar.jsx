@@ -33,7 +33,7 @@ export default function Navbar() {
               <Link to="/Noticia" className="nav-link">Notícias</Link>
             </li>
             <li className="nav-item">
-              <Link to="/Noticia" className="nav-link">Quem somos</Link>
+              <Link to="/Historia" className="nav-link">Quem somos</Link>
             </li>
           </ul>
         </div>
@@ -113,6 +113,9 @@ export default function Navbar() {
 
           <li className="nav-item">
             <Link to="/Noticia">Notícias</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/Historia" className="nav-link">Quem somos</Link>
           </li>
         </ul>
       </div>

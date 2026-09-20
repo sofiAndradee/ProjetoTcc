@@ -2,9 +2,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+
 }
 
 .home-content {
+    
   flex: 1;
 }
 
@@ -12,7 +14,7 @@
 /* HERO */
 .hero {
   max-width: 1300px;
-  margin: 0 auto 40px;
+  margin: 30px auto 40px;
   padding: 0 24px;
 }
 
