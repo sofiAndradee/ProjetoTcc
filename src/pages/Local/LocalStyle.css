@@ -5,14 +5,17 @@
   min-height: 400px;
 }
 
-.listaCards {
-  max-width: 990px;
-  margin: 30px auto;
+.lista-cards {
+  max-width: 1200px;
+  min-height: 400px;
+  margin:  20px auto ;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-height: 200px;
+  
+  
+
 }
 
 

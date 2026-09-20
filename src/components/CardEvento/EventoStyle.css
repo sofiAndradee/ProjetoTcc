@@ -4,6 +4,7 @@
   transition: border-color 0.2s ease;
   border-radius: 16px;
   padding: 28px 32px;
+  margin-top: 20px;
 }
 
 .evento-card:hover {

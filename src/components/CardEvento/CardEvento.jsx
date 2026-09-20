@@ -1,18 +1,21 @@
 import "./EventoStyle.css";
 
-export default function EventoCard() {
+export default function EventoCard({dados}) {
   return (
    
-      <div className="evento-card">
+      <div className="evento-card"
+      >
         <span className="tag">
-          Projeto Bola na Rede
+          {dados.nomeProjeto}
         </span>
 
-        <h3>Campeonato de verão</h3>
+        <h3>
+          {dados.tituloEvento}
+        </h3>
 
         <p>
-          Estamos organizando nosso torneio semestral! Todas as crianças e jovens
-          cadastrados no projeto podem participar. Venha representar seu time.
+          {dados.descricaoEvento}
+        
         </p>
 
         <span className="date-tag">
