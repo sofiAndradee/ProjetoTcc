@@ -71,7 +71,7 @@ export default function Noticia() {
             <Navbar></Navbar>
             <main>
                 <PesquisaFiltro
-                    placeholder="Pesquise o a noticia que voce deseja "
+                    placeholder="Pesquise a noticia que voce deseja "
                     termoBusca={termoBusca}
                     setTermoBusca={setTermoBusca}
                     filtroCategoria={filtroCategoria}

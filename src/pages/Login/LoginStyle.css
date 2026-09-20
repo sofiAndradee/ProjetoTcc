@@ -85,7 +85,7 @@ h1 {
     transition: color 0.2s;
 }
 
-input {
+.input-wrapper input {
     width: 100%;
     padding: 14px 16px 14px 46px;
     border-radius: 12px;
@@ -96,13 +96,13 @@ input {
     transition: all 0.2s ease;
 }
 
-input:focus {
+ .input-wrapper input:focus {
     outline: none;
     background-color: rgba(26, 29, 41, 0.9);
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
 }
 
-input:focus+i {
+.input-wrapper input:focus+i {
     color: #3b82f6;
 }
 
@@ -130,7 +130,21 @@ input:focus+i {
     opacity: 0.95;
 }
 
+.link-alternativo {
+    margin-top: 24px;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
 
+.link-alternativo a {
+    color: #a855f7;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+.link-alternativo a:hover {
+    color: #c084fc;
+}
 
 .voltar {
     margin-top: 24px;

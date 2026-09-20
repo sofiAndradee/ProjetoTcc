@@ -9,7 +9,7 @@ import Home  from './pages/Home/Home'
 import Local  from './pages/Local/Local'
 import Noticia from './pages/Noticia/Noticia'
 import Historia from './pages/Historia/quem-somos'
-
+import Cadastro from './pages/Cadastro/Cadastro'
 
 
 createRoot(document.getElementById('root')).render(
@@ -21,6 +21,7 @@ createRoot(document.getElementById('root')).render(
       <Route path='/Noticia' element={<Noticia/>}/>
       <Route path='/Login' element={<Login/>}/>
       <Route path='/Historia' element={<Historia/>}/>
+      <Route path="/Cadastro" element={<Cadastro />} />
     </Routes>
   
   </BrowserRouter>,

@@ -10,6 +10,7 @@ export default function Navbar() {
     const { pathname } = useLocation();
 
    const estaNoLogin = pathname === "/Login";
+   const estaNoCadastro = pathname === "/Cadastro";
   return (
     <header>
       <nav className="nav-bar">
@@ -74,7 +75,8 @@ export default function Navbar() {
         
 
        {
-        !estaNoLogin &&(
+        
+        !(estaNoLogin  || estaNoCadastro) &&(
           <Link className="btn-cadastro"  to="/Login" >cadastre</Link>
         )
        }

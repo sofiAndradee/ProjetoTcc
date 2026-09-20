@@ -34,10 +34,10 @@ function Login() {
       <div className="main-container">
 
         <div id="loginBox" className="glass-box login-size">
-          
-        <div className="div-logo">
+
+          <div className="div-logo">
             <img className="imagem-logo" src={logo} alt="" />
-        </div>       
+          </div>
 
           <form >
             <div className="form-group">
@@ -74,6 +74,11 @@ function Login() {
               Entrar na Conta
             </button>
           </form>
+
+
+          <p className="link-alternativo">
+            Não tenho conta? <Link to="/Cadastro">Cadastre-se aqui</Link>
+          </p>
 
           <Link to="/" className="voltar">
             <i className="fas fa-arrow-left"></i>Voltar para o Início
