@@ -3,14 +3,25 @@ import { Link, useLocation } from "react-router-dom"
 import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
 
-
+import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-    const { pathname } = useLocation();
+  const { pathname } = useLocation();
+  const { user, logout } = useAuth();
+  const ehAdmin = user?.tipo === "admin";
+  const estaNoLogin = pathname === "/Login";
+  const estaNoCadastro = pathname === "/Cadastro";
+  const estaNoForms = pathname === "/cadastroProjeto";
 
-   const estaNoLogin = pathname === "/Login";
-   const estaNoCadastro = pathname === "/Cadastro";
+
+  const iniciais = user?.nome
+    ?.split(" ")
+    .map((parte) => parte[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <header>
       <nav className="nav-bar">
@@ -23,7 +34,7 @@ export default function Navbar() {
         <div className="main-nav">
           <ul>
             <li className="nav-item">
-              <Link to="/"  className="nav-link">Início</Link>
+              <Link to="/" className="nav-link">Início</Link>
             </li>
 
             <li className="nav-item">
@@ -36,10 +47,16 @@ export default function Navbar() {
             <li className="nav-item">
               <Link to="/Historia" className="nav-link">Quem somos</Link>
             </li>
+
+            {ehAdmin && (
+              <li className="nav-item">
+                <Link to="/DashBoard" className="nav-link">Painel</Link>
+              </li>
+            )}
           </ul>
         </div>
- 
-         <div className="search-wrap">
+
+        <div className="search-wrap">
           <div className="search-icon">
 
             <input
@@ -70,18 +87,31 @@ export default function Navbar() {
 
           </div>
         </div>
-        
 
-        
 
-       {
-        
-        !(estaNoLogin  || estaNoCadastro) &&(
-          <Link className="btn-cadastro"  to="/Login" >cadastre</Link>
-        )
-       }
-      
-        
+
+
+
+        {user ? (
+          // USUÁRIO LOGADO: mostra o avatar
+          <div className="avatar-wrap">
+            <div className="avatar" title={user.nome}>
+              {user.avatar ? (
+                <img src={user.avatar} alt={user.nome} />
+              ) : (
+                iniciais
+              )}
+            </div>
+
+          </div>
+        ) : (
+
+          !(estaNoLogin || estaNoCadastro || estaNoForms) && (
+            <Link className="btn-cadastro" to="/Login" >cadastre</Link>
+          )
+        )}
+
+
         {/* PERFIL
         <div className="avatar">
           SR
@@ -97,7 +127,7 @@ export default function Navbar() {
             {menuOpen ? "✕" : "☰"}
           </button>
         </div>
-       
+
       </nav>
 
 
@@ -119,6 +149,12 @@ export default function Navbar() {
           <li className="nav-item">
             <Link to="/Historia" className="nav-link">Quem somos</Link>
           </li>
+          
+          {ehAdmin && (
+            <li className="nav-item">
+              <Link to="/DashBoard" className="nav-link">Painel</Link>
+            </li>
+          )}
         </ul>
       </div>
     </header >

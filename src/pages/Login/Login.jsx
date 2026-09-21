@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/NavBar/Navbar"
 import Footer from "../../components/Footer/Footer"
 import logo from "../../assets/logo-comuna-esportes.png";
+import { useAuth } from "../../context/AuthContext";
 
 import "./LoginStyle.css"
 
@@ -10,19 +11,42 @@ import "./LoginStyle.css"
 
 
 function Login() {
+   const usuariosFake = [
+  { usuario: "admin", senha: "admin123", nome: "Administrador", tipo: "admin", avatar: null },
+  { usuario: "samuel", senha: "123456", nome: "Samuel Rocha", tipo: "atleta", avatar: null },
+
+];
+
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
+
 
   const testarLogin = (e) => {
     e.preventDefault();
 
     // Substitua pela sua lógica real de autenticação
-    if (usuario === "admin" && senha === "admin123") {
-      navigate("/");
-    } else {
-      alert("Usuário ou senha inválidos");
-    }
+const encontrado = usuariosFake.find(
+    (u) => u.usuario === usuario && u.senha === senha
+  );
+
+  if (encontrado) {
+    login({
+      nome: encontrado.nome,
+      tipo: encontrado.tipo, // novo
+      avatar: encontrado.avatar,
+    });
+
+      if(encontrado.tipo == "admin"){
+          navigate("/DashBoard");
+      }else{
+       navigate("/")
+      };
+    
+  } else {
+    alert("Usuário ou senha inválidos");
+  }
   };
 
   return (
@@ -70,7 +94,7 @@ function Login() {
               </div>
             </div>
 
-            <button type="submit" className="btn-primary">
+            <button type="submit" className="btn-primary" onClick={testarLogin}>
               Entrar na Conta
             </button>
           </form>

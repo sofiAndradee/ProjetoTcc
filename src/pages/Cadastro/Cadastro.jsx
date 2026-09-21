@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./CadastroStyle.css";
 import logo from "../../assets/logo-comuna-esportes.png";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/NavBar/Navbar";
-
+import './CadastroStyle.css'; 
 
 
 
@@ -60,7 +59,6 @@ export default function Cadastro() {
                   placeholder="Seu nome"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  autoComplete="given-name"
                   required
                 />
                 <i className="fas fa-user"></i>
@@ -76,7 +74,6 @@ export default function Cadastro() {
                   placeholder="Seu sobrenome"
                   value={sobrenome}
                   onChange={(e) => setSobrenome(e.target.value)}
-                  autoComplete="family-name"
                   required
                 />
                 <i className="fas fa-user"></i>
@@ -109,7 +106,6 @@ export default function Cadastro() {
                 placeholder="Mínimo de 6 caracteres"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                autoComplete="new-password"
                 required
               />
               <i className="fas fa-lock"></i>
