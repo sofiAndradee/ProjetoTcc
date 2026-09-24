@@ -1,11 +1,10 @@
-
-
 .nav-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem 6rem;
-
+    border-bottom: solid 1px #3d3a3ab3;
+    background-color: var(--bg);
 
 }
 
@@ -79,7 +78,29 @@ a {
 }
 
 
+.btn-cadastro {
+    text-align: center;
+    transition: 0.12s ease;
+    background: linear-gradient(to bottom right,
+            #4d06aa34 15%,
+            rgba(209, 153, 237, 0) 50%);
+    border: 1px solid #ffffff49;
+    color: #dbdcdd;
+    margin: 10px;
+    width: 130px;
+    padding: 6px;
+    box-shadow: rgba(99, 99, 99, 0.163) 0px 2px 8px 1px;
+    border-radius: 20px;
+  
 
+}
+
+.btn-cadastro:hover {
+    box-shadow: rgba(99, 99, 99, 0.247) 2px 2px 6px 1px;
+    color: #fff;
+    border: 1px solid #dbdcdd;
+
+}
 
 .avatar {
     margin: 10px;
@@ -94,15 +115,13 @@ a {
     font-weight: 700;
     font-size: 0.9rem;
     color: #fff;
-   
+
 }
 
 .mobile-menu {
     display: none;
-    padding-top: 10px;
-    border-top: solid 1px #3d3a3a;
     transition: opacity 0.4s ease;
-
+    background-color: var(--bg);
 }
 
 .mobile-menu-icon {
@@ -112,7 +131,6 @@ a {
 
 
 .menu-toggle {
-
     margin: 5px;
     background: none;
     border: none;
@@ -125,7 +143,6 @@ a {
 
 .search-wrap {
     flex-shrink: 0;
-    /* não deixa esse item ser espremido por outros */
     display: flex;
 
 }
@@ -141,6 +158,7 @@ a {
     overflow: hidden;
     background: #222222;
     transition: width 0.5s;
+
 }
 
 .search-icon:hover {
@@ -157,6 +175,9 @@ a {
     line-height: 30px;
     width: 0;
     transition: .5s;
+    width: 0;
+    padding: 0;
+    min-width: 0;
 }
 
 .search-icon:hover>.search-txt {
@@ -172,7 +193,6 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 
@@ -191,33 +211,35 @@ a {
     }
 
 
-   
+
     .main-nav {
         display: none;
     }
 
 
     .logo {
-    
         grid-column: 1;
         grid-row: 2;
         justify-self: start;
     }
 
 
-  
+    .btn-cadastro{
+        grid-column: 2;
+        grid-row: 2;
+        margin-left: 0;
+        justify-self: end;
+    }
 
     .avatar {
         grid-column: 2;
         grid-row: 2;
-
         margin-left: 0;
-
         justify-self: end;
     }
 
 
-    
+
 
     .mobile-menu-icon {
         display: block;
@@ -274,8 +296,8 @@ a {
 
 
 @media (max-width: 480px) {
-     
-       .logo {
+
+    .logo {
         grid-column: 1;
         grid-row: 2;
         justify-self: start;

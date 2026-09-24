@@ -1,0 +1,54 @@
+/* Só o que o Cadastro tem a mais que o Login.
+   O restante (glass-box, input-wrapper, btn-primary etc.) vem do Login.css */
+
+/* Nome e sobrenome lado a lado */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+}
+
+/* Mensagem de erro (ex.: senhas diferentes) */
+.form-erro {
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+/* "Já tem uma conta? Entrar" */
+.link-alternativo {
+    margin-top: 24px;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.link-alternativo a {
+    color: #a855f7;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+.link-alternativo a:hover {
+    color: #c084fc;
+}
+
+/* A caixa fica um pouco mais larga para caber os dois campos lado a lado */
+#cadastroBox.login-size {
+    max-width: 480px;
+}
+
+/* Em telas pequenas, nome e sobrenome empilham */
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    #cadastroBox {
+        padding: 28px 22px;
+    }
+}

@@ -4,7 +4,8 @@ export default function PesquisaFiltro({
   termoBusca,
   setTermoBusca,
   filtroCategoria,
-  setFiltroCategoria
+  setFiltroCategoria,
+  placeholder = "Pesquise o local mais próximo de você"
 }) {
 
   const filtros = [
@@ -27,8 +28,7 @@ export default function PesquisaFiltro({
        
         className="input-filtro"
         type="search"
-        placeholder="Pesquise o local mais próximo de você"
-
+        placeholder={placeholder}
         value={termoBusca}
 
         onChange={(e) =>

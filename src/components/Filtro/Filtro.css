@@ -1,16 +1,12 @@
 
 .pesquisa-container {
   width: 100%;
-  padding: 20px 24px;
-}
-
-.barra-pesquisa {
   position: relative;
-  width: 100%;
-  max-width: 990px;
-  margin: 0 auto 20px auto;
+  max-width: 1200px;
+  margin: 4% auto 20px auto;
   box-sizing: border-box;
 }
+
 
 .icone-pesquisa {
   position: absolute;

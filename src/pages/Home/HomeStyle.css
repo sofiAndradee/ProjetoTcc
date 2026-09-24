@@ -2,17 +2,19 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+
 }
 
 .home-content {
+    
   flex: 1;
 }
 
 
 /* HERO */
 .hero {
-  max-width: 1200px;
-  margin: 0 auto 40px;
+  max-width: 1300px;
+  margin: 30px auto 40px;
   padding: 0 24px;
 }
 
@@ -118,8 +120,8 @@
 
 .pill {
   flex: 1 1 200px;
-  background: #02002465;
-  background: radial-gradient(circle, rgba(2, 0, 36, 0.459) 0%, rgba(9, 9, 121, 0.514) 51%);
+  background: #02002434;
+  background: radial-gradient(circle, rgba(2, 0, 36, 0.459) 0%, rgba(9, 9, 121, 0.29) 51%);
   border: 1.2px solid var(--pill-border);
   border-radius: 999px;
   padding: 16px 26px;
@@ -135,23 +137,22 @@
 .pill:hover {
   transform: translateY(-2px);
   background: #000000b3;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.63) 0%, rgba(5, 5, 61, 0.625) 51%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.538) 0%, rgba(5, 5, 61, 0.456) 51%);
 
 }
- 
+
 .pill .icon {
   width: 26px;
   height: 26px;
   flex-shrink: 0;
 }
 
-@media (max-width: 900px) {
 
-  .hero-content h1 {
-    font-size: 2.1rem;
-  }
+.hero-content h1 {
+  font-size: 2.1rem;
 }
-@media (max-width: 768px){
+
+@media (max-width: 768px) {
 
   .hero-inner {
     min-height: 380px;
@@ -175,17 +176,9 @@
     font-size: 0.95rem;
   }
 
-  .destaque-card {
-    padding: 22px;
-  }
 }
 
 @media (max-width: 480px) {
-  /* header {
-    padding: 16px;
-  } */
-
-
 
   .hero {
     padding: 0 16px;
@@ -220,4 +213,5 @@
   .pill {
     flex: 1 1 100%;
   }
+
 }
