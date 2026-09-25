@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo-comuna-esportes.png";
-import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/NavBar/Navbar";
 import './CadastroStyle.css'; 
 
 
@@ -41,7 +39,7 @@ export default function Cadastro() {
 
   return (
     <>
-    <Navbar/>
+    
     <div className="main-container">
       <div id="cadastroBox" className="glass-box login-size">
         <div className="div-logo">
@@ -148,7 +146,7 @@ export default function Cadastro() {
         </Link>
       </div>
     </div>
-    <Footer/>
+  
     
     </>
   );

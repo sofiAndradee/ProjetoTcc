@@ -68,7 +68,7 @@ export default function Noticia() {
 
     return (
         <>
-            <Navbar></Navbar>
+        
             <main>
                 <PesquisaFiltro
                     placeholder="Pesquise a noticia que voce deseja "
@@ -106,7 +106,7 @@ export default function Noticia() {
 
                 </div>
             </main>
-            <Footer></Footer>
+      
         </>
 
     );

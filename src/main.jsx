@@ -13,13 +13,15 @@ import Historia from './pages/Historia/quem-somos';
 import Cadastro from './pages/Cadastro/Cadastro';
 import CadastroProjeto from './pages/CadastroProjeto/CadastroProjeto';
 import Dashboard from "./pages/DashBoard/DashBoard";
-import Login from './pages/Login/Login'; 
-
+import Login from './pages/Login/Login'
+import Navbar from "./components/NavBar/Navbar";
+import Footer from "./components/Footer/Footer";
 
 createRoot(document.getElementById('root')).render(
 
   <BrowserRouter>
     <AuthProvider>
+    <Navbar/>
     <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='/Local' element={<Local/>}/>
@@ -30,6 +32,8 @@ createRoot(document.getElementById('root')).render(
       <Route path="/CadastroProjeto" element={<CadastroProjeto/>} />
       <Route path="/DashBoard" element={<Dashboard/>}/>
     </Routes>
+    <Footer/>
+
     </AuthProvider>
   </BrowserRouter>,
 

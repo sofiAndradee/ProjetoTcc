@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/NavBar/Navbar"
-import Footer from "../../components/Footer/Footer"
 import './CadastroProj.css';
 
 
@@ -39,7 +37,7 @@ export default function InscreverProjeto() {
   return (
     <>
 
-    <Navbar/>
+   
 
 
     <div className="form-container">
@@ -144,8 +142,7 @@ export default function InscreverProjeto() {
       </form>
     </div>
 
-    <Footer/>
-    
+  
     
     </>
   );

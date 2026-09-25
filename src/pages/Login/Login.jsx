@@ -11,47 +11,46 @@ import "./LoginStyle.css"
 
 
 function Login() {
-   const usuariosFake = [
-  { usuario: "admin", senha: "admin123", nome: "Administrador", tipo: "admin", avatar: null },
-  { usuario: "samuel", senha: "123456", nome: "Samuel Rocha", tipo: "atleta", avatar: null },
 
-];
 
-  const [usuario, setUsuario] = useState("");
+  
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
-
-  const testarLogin = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
+    setErro("");
 
-    // Substitua pela sua lógica real de autenticação
-const encontrado = usuariosFake.find(
-    (u) => u.usuario === usuario && u.senha === senha
-  );
+    try {
+      const res = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+      });
 
-  if (encontrado) {
-    login({
-      nome: encontrado.nome,
-      tipo: encontrado.tipo, // novo
-      avatar: encontrado.avatar,
-    });
+      const data = await res.json();
 
-      if(encontrado.tipo == "admin"){
-          navigate("/DashBoard");
-      }else{
-       navigate("/")
-      };
-    
-  } else {
-    alert("Usuário ou senha inválidos");
-  }
+      if (!data.sucesso) {
+        setErro(data.mensagem);
+        return;
+      }
+
+      login(data.dados);
+      navigate("/");
+      // redirecionar ou salvar o usuário no estado global aqui
+
+    } catch (err) {
+      console.error(err);
+      setErro("Erro ao conectar com o servidor");
+    }
   };
 
   return (
     <>
-      <Navbar />
+      
 
 
 
@@ -63,7 +62,7 @@ const encontrado = usuariosFake.find(
             <img className="imagem-logo" src={logo} alt="" />
           </div>
 
-          <form >
+          <form  onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="usuario">Usuário ou E-mail</label>
               <div className="input-wrapper">
@@ -71,8 +70,8 @@ const encontrado = usuariosFake.find(
                   type="text"
                   id="usuario"
                   placeholder="Seu usuário"
-                  value={usuario}
-                  onChange={(e) => setUsuario(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
                 <i className="fas fa-user"></i>
@@ -93,8 +92,8 @@ const encontrado = usuariosFake.find(
                 <i className="fas fa-lock"></i>
               </div>
             </div>
-
-            <button type="submit" className="btn-primary" onClick={testarLogin}>
+            {erro && <p style={{ color: "red" }}>{erro}</p>}
+            <button type="submit" className="btn-primary">
               Entrar na Conta
             </button>
           </form>
@@ -112,7 +111,7 @@ const encontrado = usuariosFake.find(
 
 
 
-      <Footer />
+
     </>
   );
 }
