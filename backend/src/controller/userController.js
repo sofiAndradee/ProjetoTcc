@@ -23,9 +23,9 @@ const ListarUsuarios = async (req, res) => {
 // =========================================================================
 const adicionarUsuario = async (req, res) => {
     try {
-        const { nome, email, telefone, endereco, dt_nasc, senha, tipo_acesso } = req.body;
+        const { nome, email, telefone, endereco, senha, tipo_acesso } = req.body;
 
-        if (!nome || !email || !telefone || !endereco || !dt_nasc || !senha) {
+        if (!nome || !email || !telefone || !endereco || !senha) {
             return res.status(400).json({ sucesso: false, mensagem: "Preencha todos os campos obrigatórios." });
         }
 
@@ -36,8 +36,8 @@ const adicionarUsuario = async (req, res) => {
         }
 
         await db.query(
-            "INSERT INTO cadusers (nome, email, telefone, endereco, dt_nasc, senha, tipo_acesso) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [nome, email, telefone, endereco, dt_nasc, senha, tipo_acesso || 'comum']
+            "INSERT INTO cadusers (nome, email, telefone, endereco, senha, tipo_acesso) VALUES (?, ?, ?, ?, ?, ?)",
+            [nome, email, telefone, endereco, senha, tipo_acesso || 'comum']
         );
 
         res.status(201).json({ sucesso: true, mensagem: "Usuário cadastrado com sucesso via Pool!" });
@@ -68,15 +68,6 @@ const efetuarLogin = async (req, res) => {
         }
 
         const usuario = linhas[0];
-
-
-        console.log("Linhas retornadas:", JSON.stringify(linhas));
-        
-        console.log("Do banco:", JSON.stringify(usuario.senha));
-        console.log("Digitado:", JSON.stringify(senha));
-        console.log("Email recebido:", JSON.stringify(email));
-        console.log("Do banco:", JSON.stringify(usuario.senha));
-        console.log("Digitado:", JSON.stringify(senha));
 
         if (usuario.senha !== senha) {
             return res.status(401).json({ sucesso: false, mensagem: "Senha incorreta." });
