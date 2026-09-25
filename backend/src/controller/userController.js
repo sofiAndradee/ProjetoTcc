@@ -6,7 +6,7 @@ const db = require("../config/pool.js"); // Garanta que o caminho aponta para o 
 const ListarUsuarios = async (req, res) => {
     try {
         const [rows] = await db.query(
-            "SELECT id, nome, email, telefone, endereco, tipo_acesso FROM cadusers WHERE ativo = true"
+            "SELECT id, nome, email, telefone, endereco, tipo_acesso FROM cadusers "
         );
         res.status(200).json({
             sucesso: true,
@@ -59,7 +59,7 @@ const efetuarLogin = async (req, res) => {
 
         // Busca na tabela 'cadusers' que criamos no seu MySQL
         const [linhas] = await db.query(
-            "SELECT id, nome, email, senha, tipo_acesso FROM cadusers WHERE email = ? AND ativo = TRUE", 
+            "SELECT id, nome, email, senha, tipo_acesso FROM cadusers  WHERE email = ?",
             [email]
         );
 
@@ -68,6 +68,15 @@ const efetuarLogin = async (req, res) => {
         }
 
         const usuario = linhas[0];
+
+
+        console.log("Linhas retornadas:", JSON.stringify(linhas));
+        
+        console.log("Do banco:", JSON.stringify(usuario.senha));
+        console.log("Digitado:", JSON.stringify(senha));
+        console.log("Email recebido:", JSON.stringify(email));
+        console.log("Do banco:", JSON.stringify(usuario.senha));
+        console.log("Digitado:", JSON.stringify(senha));
 
         if (usuario.senha !== senha) {
             return res.status(401).json({ sucesso: false, mensagem: "Senha incorreta." });

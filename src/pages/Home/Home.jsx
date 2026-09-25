@@ -14,7 +14,7 @@ function Home() {
 
         <>
 
-            <Navbar />
+    
 
 
             <main>
@@ -130,7 +130,7 @@ function Home() {
                 </section>
 
             </main>
-            <Footer />
+        
         </>
 
 

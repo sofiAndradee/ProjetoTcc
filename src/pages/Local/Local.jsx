@@ -82,8 +82,6 @@ function Locais() {
   return (
     <div className="locais-page">
 
-      <Navbar />
-
       <main>
 
         <PesquisaFiltro
@@ -119,7 +117,6 @@ function Locais() {
 
       </main>
 
-      <Footer />
 
     </div>
   );

@@ -9,7 +9,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const { user, logout } = useAuth();
-  const ehAdmin = user?.tipo === "admin";
+  const ehAdmin = user?.tipo_acesso === "admin";
   const estaNoLogin = pathname === "/Login";
   const estaNoCadastro = pathname === "/Cadastro";
   const estaNoForms = pathname === "/cadastroProjeto";

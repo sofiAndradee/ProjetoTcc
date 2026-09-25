@@ -14,7 +14,7 @@ app.use(cors()); // Ativa a liberação de acesso para o front-end
 app.use(express.json());
 
 // Endpoints principais da sua API
-app.use("/users", userRoutes);
+app.use("/api", userRoutes);
 
 // Página inicial de teste da API
 app.get("/", (req, res) => {

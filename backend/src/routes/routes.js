@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 // Importação correta dos dois controladores limpos do Pool MySQL
-const userController = require("../../controller/userController");
-const projetoController = require("../../controller/projetoController");
+const userController = require("../controller/userController");
+const projetoController = require("../controller/projetoController");
 
 // =========================================================================
 // 👥 ROTAS DE USUÁRIOS E LOGIN (Vêm do userController)

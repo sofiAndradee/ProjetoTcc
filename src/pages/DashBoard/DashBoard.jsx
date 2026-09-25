@@ -97,7 +97,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Navbar />
+    
 
       <main className="admin-page">
         <div className="admin-box">

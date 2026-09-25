@@ -7,12 +7,17 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
    const navigate = useNavigate();
-  // Restaura a sessão ao recarregar a página
-  useEffect(() => {
-    const salvo = localStorage.getItem("user");
-    if (salvo) setUser(JSON.parse(salvo));
-  }, []);
 
+useEffect(() => {
+    const salvo = localStorage.getItem("user");
+    if (salvo && salvo !== "undefined") {
+        try {
+            setUser(JSON.parse(salvo));
+        } catch {
+            localStorage.removeItem("user");
+        }
+    }
+}, []);
   function login(dadosUsuario) {
     setUser(dadosUsuario);
     localStorage.setItem("user", JSON.stringify(dadosUsuario));

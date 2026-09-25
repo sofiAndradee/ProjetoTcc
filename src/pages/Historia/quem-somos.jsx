@@ -1,5 +1,4 @@
-import Navbar from "../../components/NavBar/Navbar";
-import Footer from  "../../components/Footer/Footer"
+
 import './AboutStyle.css'
 
 function quemSomos() {
@@ -8,8 +7,6 @@ function quemSomos() {
 
         <>
 
-
-        <Navbar />
 
             <div className="container">
 
@@ -63,7 +60,7 @@ function quemSomos() {
 
             </div>
 
-        <Footer/>
+    
         </>
     );
 
