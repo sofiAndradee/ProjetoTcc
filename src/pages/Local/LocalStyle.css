@@ -2,12 +2,12 @@
   color: #b7b7b7;
   text-align: center;
   padding: 40px 0;
-  min-height: 400px;
+  min-height: 500px;
 }
 
 .lista-cards {
   max-width: 1200px;
-  min-height: 400px;
+  min-height: 500px;
   margin:  20px auto ;
   padding: 0 20px;
   display: flex;

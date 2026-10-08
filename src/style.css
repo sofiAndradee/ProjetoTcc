@@ -32,24 +32,6 @@ a {
   text-decoration: none;
 }
 
-img {
-  max-width: 100%;
-  display: block;
-}
-
-.container {
-  max-width: 1300px;
-  padding: 0 24px;
-}
-
-
-
- a {
-     color: inherit;
-     text-decoration: none;
- }
- 
-
 /* DESTAQUE */
 
 

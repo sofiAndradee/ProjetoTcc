@@ -37,8 +37,8 @@ createRoot(document.getElementById('root')).render(
         </RotaPublica>
       }/>
 
-
       <Route path='/Historia' element={<Historia/>}/>
+      
       <Route path="/Cadastro" element={
         <RotaPublica>
           <Cadastro />
@@ -51,6 +51,7 @@ createRoot(document.getElementById('root')).render(
           <CadastroProjeto/>
         </RotaProtegida>
         } />
+        
       <Route path="/DashBoard" element={
         <RotaProtegida apenasAdmin={true}>
           <Dashboard/>
