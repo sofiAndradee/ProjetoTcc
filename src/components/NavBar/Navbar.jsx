@@ -1,106 +1,87 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"
-import "./NavbarStyle.css"
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import "./NavbarStyle.css";
 import logo from "../../assets/logo-comuna-esportes.png";
-import local from "../../pages/Local/Local";
+import { useAuth } from "../../context/AuthContext";
+
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownAberto, setDropdownAberto] = useState(false);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const ehAdmin = user?.tipo_acesso === "admin";
+  const estaNoLogin = pathname === "/Login";
+  const estaNoCadastro = pathname === "/Cadastro";
+
+  // Gera as iniciais do nome do usuário
+  const partes = user?.nome?.trim().split(" ") || [];
+  const iniciais = partes.length > 1
+    ? (partes[0].charAt(0) + partes[partes.length - 1].charAt(0)).toUpperCase()
+    : user?.nome?.substring(0, 2).toUpperCase();
+
   return (
-    <header>
+    <header className="site-header-global">
       <nav className="nav-bar">
         <div className="logo">
-          <Link to="/" >
-            <img className="logo-img" src={logo} alt="" />
+          <Link to="/">
+            <img className="logo-img" src={logo} alt="Logo Comuna Esportes" />
           </Link>
         </div>
 
         <div className="main-nav">
           <ul>
-            <li className="nav-item">
-              <Link to="/"  className="nav-link">Início</Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to="/Local" className="nav-link">Locais</Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to="" className="nav-link">Notícias</Link>
-            </li>
+            <li><Link to="/">Início</Link></li>
+            <li><Link to="/Local">Locais</Link></li>
+            <li><Link to="/Noticia">Notícias</Link></li>
+            <li><Link to="/Historia">Quem Somos</Link></li>
           </ul>
         </div>
- 
-         <div className="search-wrap">
-          <div className="search-icon">
 
-            <input
-              type="text"
-              className="search-txt"
-              placeholder="Pesquisar..."
-            />
-
-            <a className="search-btn" aria-label="Pesquisar">
-              <svg
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="#ffffff"
-                
-                strokeLinecap="round"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <line
-                  x1="21"
-                  y1="21"
-                  x2="16.65"
-                  y2="16.65"
-                />
-              </svg>
-            </a>
-
-          </div>
-        </div>
-        
-
-        
-        
-        {/* PERFIL */}
-        <div className="avatar">
-          SR
-        </div>
-
-
-        {/* MENU HAMBÚRGUER */}
-        <div className="mobile-menu-icon">
-          <button
-            className="menu-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
+                {user ? (
+          /* CONTAINER DO AVATAR COM REDIRECIONAMENTO E DROPDOWN */
+          <div 
+            className="avatar-navbar-wrapper"
+            onClick={() => setDropdownAberto(!dropdownAberto)}
           >
-            {menuOpen ? "✕" : "☰"}
-          </button>
-        </div>
-       
+            <div className="avatar-mini" title={user.nome}>
+              {iniciais}
+            </div>
+
+            {/* DROPDOWN INTEGRADO NA NAVBAR ESTILO GITHUB */}
+            {dropdownAberto && (
+              <div className="navbar-dropdown-menu" onClick={(e) => e.stopPropagation()}>
+                <div className="navbar-dropdown-user-info">
+                  <span className="nav-user-name">{user.nome}</span>
+                  <span className="nav-user-email">@{user.email.split("@")}</span>
+                </div>
+                <hr />
+                
+                <button type="button" onClick={() => { navigate("/Perfil"); setDropdownAberto(false); }}>
+                  <span className="nav-menu-icon">👤</span> Meu Perfil
+                </button>
+
+                {ehAdmin && (
+                  <button type="button" onClick={() => { navigate("/DashBoard"); setDropdownAberto(false); }}>
+                    <span className="nav-menu-icon">📊</span> Painel Admin
+                  </button>
+                )}
+                
+                <hr />
+                
+                <button type="button" className="nav-menu-signout" onClick={() => { logout(); setDropdownAberto(false); }}>
+                  <span className="nav-menu-icon">🚪</span> Sair da Conta
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          !(estaNoLogin || estaNoCadastro) && (
+            <Link className="btn-cadastro" to="/Login">Entrar</Link>
+          )
+        )}
+
       </nav>
-
-
-      {/* MENU MOBILE */}
-      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-        <ul>
-
-          <li className="nav-item">
-            <Link to="/">Início</Link>
-          </li>
-
-          <li className="nav-item">
-            <Link to="/Local">Locais</Link>
-          </li>
-
-          <li className="nav-item">
-            <Link to="/">Notícias</Link>
-          </li>
-        </ul>
-      </div>
-    </header >
+    </header>
   );
 }

@@ -1,0 +1,258 @@
+/* Estilos escopados em .form-container para não afetar o resto do site.
+   Ajuste as cores se o seu CSS original for diferente. */
+
+.form-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 5% auto 40px ;
+    padding: 40px;
+    border-radius: 24px;
+    background: rgba(18, 20, 28, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.form-header {
+    margin-bottom: 32px;
+}
+
+.form-header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.form-header p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.project-form .form-group {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.project-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+.project-form input,
+.project-form select,
+.project-form textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #1e2230;
+    background-color: rgba(26, 29, 41, 0.6);
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.project-form textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.project-form input:focus,
+.project-form select:focus,
+.project-form textarea:focus {
+    outline: none;
+    border-color: #f5f6f678;
+    background-color: rgba(26, 29, 41, 0.9);
+    box-shadow: 0 0 0 2px rgba(183, 201, 230, 0.15);
+}
+
+/* Select: o navegador desenha o menu, então forçamos fundo escuro nas opções */
+.project-form select option {
+    background: #12141c;
+    color: #ffffff;
+}
+
+.obrigatorio::after{
+  content:" *";
+  color: #7c3aed;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+
+
+.modalidades-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modalidades-fieldset legend {
+  padding: 0;
+  margin-bottom: 4px;
+  font: inherit;
+  font-weight: 600;
+}
+.checkbox-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center;
+  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.project-form .checkbox-item {
+  position: relative;      /* segura o checkbox escondido no lugar */
+  display: flex;  
+  align-items: center;   
+  margin: 0;
+  border: 0;
+  padding: 10px 12px;
+  cursor: pointer;
+  user-select: none;             
+  line-height: 1;
+}
+
+/* esconde o checkbox, mas ele continua funcionando pelo teclado */
+.project-form .checkbox-item input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+}
+
+.project-form .checkbox-item span {
+  display: block;
+  padding: 9px 16px;
+  border: 1px solid #2f3548;
+  border-radius: 10px;
+  background: rgba(26, 29, 41, 0.6);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.project-form .checkbox-item:hover span {
+  border-color: #5a6280;
+}
+
+.project-form .checkbox-item input:checked + span {
+  border-color: #422672;
+  background: rgba(106, 93, 128, 0.18);
+  box-shadow: 0 0 0 1px #7c3aed;
+}
+
+.project-form .checkbox-item input:focus-visible + span {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+
+.campo-ajuda {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+
+.outra-campo input:focus-visible {
+  outline-offset: 2px;
+}
+
+.outra-campo {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo-erro {
+  margin-top: 10px;
+  color: #c62828;
+  font-size: 0.9rem;
+}
+
+/* ---- Campos adicionados: faixa etária, horário e dias ---- */
+
+.linha-dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.campo-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+[aria-invalid="true"],
+[data-erro="true"] {
+  outline: 2px solid #c62828;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+
+
+.project-form .checkbox-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;               
+  flex: 0 0 18px;
+  accent-color: #6906bf;    
+}
+
+.project-form .checkbox-item span {
+  display: block;
+  margin: 0;
+  line-height: 1;
+}
+
+
+@media (max-width: 480px) {
+  .linha-dupla {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 480px) {
+    .form-container {
+        padding: 28px 20px;
+    }
+    .project-form .checkbox-item {
+       padding: 0px;
+    }
+}
