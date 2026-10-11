@@ -110,16 +110,19 @@
 
 /* SPORT PILLS */
 .sports {
-  max-width: 1200px;
-  margin: 0 auto 50px;
+  max-width: 1400px;
+  padding: 0 30px;
   display: flex;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 50px;
+  gap: 25px;
   flex-wrap: wrap;
 
 }
 
 .pill {
-  flex: 1 1 300px;
+  flex: 1 1 200px;
   background: #02002434;
   background: radial-gradient(circle, rgba(2, 0, 36, 0.459) 0%, rgba(9, 9, 121, 0.29) 51%);
   border: 1.2px solid var(--pill-border);

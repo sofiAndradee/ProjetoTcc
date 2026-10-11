@@ -29,10 +29,17 @@ useEffect(() => {
     }
      setCarregando(false);
 }, []);
-  function login(token) {
+
+function login(token) {
+  try {
+    const decodificado = jwtDecode(token);
+    localStorage.setItem("token", token);
+    setUser(decodificado);
+  } catch {
+    localStorage.removeItem("token");
     setUser(null);
-    localStorage.setItem("token", JSON.stringify(token));
   }
+}
 
   function logout() {
     setUser(null);
