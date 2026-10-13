@@ -7,7 +7,7 @@ import PesquisaFiltro from "../../components/Filtro/Filtro";
 import CardLocal from "../../components/CardLocal/CardLocal";
 import "./LocalStyle.css"
 
-const dadosEsportes = [
+export const dadosEsportes = [
   {
     id: 1,
     titulo: "Futebol comunidade",
@@ -37,7 +37,31 @@ const dadosEsportes = [
     horario: "6:00 - 16:00",
     categoria: "Basquete",
     
+  },
+  {
+    id: 4,
+    titulo: "Artes Marciais comunidade",
+    faixaEtaria: "Todas as idades",
+    local: "Centro Comunitário",
+    telefone: "11 99999-9999",
+    horario: "6:00 - 16:00",
+    categoria: "Artes Marciais",
+    linkMaps: "https://www.google.com/maps/search/?api=1&query=São+Miguel+Paulista",
+    
+  },
+  {
+    id: 5,
+    titulo: "Artes Marciais comunidade",
+    faixaEtaria: "Todas as idades",
+    local: "Ceu são Miguel",
+    telefone: "11 99999-9999",
+    horario: "6:00 - 16:00",
+    categoria: "Artes Marciais",
+    linkMaps: "https://www.google.com/maps/search/?api=1&query=Ceu+são+Miguel"
+  
   }
+   
+  
 ];
 
 function Locais() {

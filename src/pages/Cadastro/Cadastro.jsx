@@ -22,6 +22,22 @@ export default function Cadastro() {
   const [erro, setErro] = useState("");
   const { login } = useAuth();
 
+
+  function mascararTelefone(valor) {
+    const d = valor.replace(/\D/g, "").slice(0, 11);
+    if (d.length <= 2) return d.length ? `(${d}` : "";
+    if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    if (d.length <= 10)
+      return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  }
+
+
+ function handleTelefone(e) {
+  setTelefone(mascararTelefone(e.target.value));
+  limparErro("telefone");
+}
+
   async function handleSubmit(e) {
     e.preventDefault();
     setErro("");
@@ -138,9 +154,9 @@ export default function Cadastro() {
                 <input
                   type="text"
                   id="telefone"
-                  placeholder="99999-9999"
+                  placeholder="(11)99999-9999"
                   value={telefone}
-                  onChange={(e) => setTelefone(e.target.value)}
+                  onChange={handleTelefone}
                   autoComplete="email"
                   required
                 />

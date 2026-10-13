@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation ,useNavigate} from "react-router-dom"
 import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
 
@@ -14,6 +14,8 @@ export default function Navbar() {
   const estaNoLogin = pathname === "/Login";
   const estaNoCadastro = pathname === "/Cadastro";
   const estaNoForms = pathname === "/cadastroProjeto";
+  const navigate = useNavigate();
+
 
   const partes = user?.nome?.trim().split(" ") || [];
   const iniciais = partes.length > 1
@@ -46,11 +48,7 @@ export default function Navbar() {
               <Link to="/Historia" className="nav-link">Quem somos</Link>
             </li>
 
-            {ehAdmin && (
-              <li className="nav-item">
-                <Link to="/DashBoard" className="nav-link">Painel</Link>
-              </li>
-            )}
+          
           </ul>
         </div>
 
@@ -109,12 +107,12 @@ export default function Navbar() {
                 <hr />
 
                 <button type="button" onClick={() => { navigate("/Perfil"); setDropdownAberto(false); }}>
-                  <span className="nav-menu-icon">👤</span> Meu Perfil
+                 Meu Perfil
                 </button>
 
                 {ehAdmin && (
                   <button type="button" onClick={() => { navigate("/DashBoard"); setDropdownAberto(false); }}>
-                    <span className="nav-menu-icon">📊</span>
+                    
                      Painel Admin
                   </button>
                 )}
@@ -122,7 +120,7 @@ export default function Navbar() {
                 <hr />
 
                 <button type="button" className="nav-menu-signout" onClick={() => { logout(); setDropdownAberto(false); }}>
-                  <span className="nav-menu-icon">🚪</span> Sair da Conta
+                   Sair da Conta
                 </button>
               </div>
             )}
@@ -171,11 +169,6 @@ export default function Navbar() {
             <Link to="/Historia" className="nav-link">Quem somos</Link>
           </li>
 
-          {ehAdmin && (
-            <li className="nav-item">
-              <Link to="/DashBoard" className="nav-link">Painel</Link>
-            </li>
-          )}
         </ul>
       </div>
     </header >

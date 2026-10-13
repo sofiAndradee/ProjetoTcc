@@ -18,7 +18,11 @@ import Navbar from "./components/NavBar/Navbar";
 import Footer from "./components/Footer/Footer";
 import RotaPublica from "./components/RotaPublica/RotaPublica";
 import RotaProtegida from "./components/RotaProtegida/RotaProtegida";
-
+import Perfil from './pages/Perfil/perfil';
+import Futebol from "./pages/Futebol/Futebol";
+import Volei from "./pages/Volei/Volei";
+import Basquete from "./pages/Basquete/Basquete";
+import ArtesMarciais from "./pages/ArtesMarciais/ArtesMarciais";
 
 
 createRoot(document.getElementById('root')).render(
@@ -30,7 +34,14 @@ createRoot(document.getElementById('root')).render(
       <Route path='/' element={<Home/>}/>
       <Route path='/Local' element={<Local/>}/>
       <Route path='/Noticia' element={<Noticia/>}/>
+         <Route path='/Perfil' element={<Perfil/>}/>
       
+      <Route path='/Futebol' element={<Futebol/>}/>
+      <Route path='/Volei' element={<Volei/>}/>
+      <Route path='/Basquete' element={<Basquete/>}/>
+      <Route path='/ArtesMarciais' element={<ArtesMarciais/>}/>
+
+
       <Route path='/Login' element={
         <RotaPublica>
           <Login/>
