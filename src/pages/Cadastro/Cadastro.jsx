@@ -59,7 +59,7 @@ export default function Cadastro() {
     try {
       const nomeCompleto = `${nome} ${sobrenome}`.trim();
 
-      const res = await fetch("http://localhost:3000/api/users", {
+      const res = await fetch("/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -84,7 +84,7 @@ export default function Cadastro() {
 
 
     } catch (erro) {
-      cosole.error(erro);
+      console.error(erro);
       setErro("Erro ao conectar com o servidor");
     }
   };

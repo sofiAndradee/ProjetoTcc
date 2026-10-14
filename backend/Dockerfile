@@ -6,7 +6,7 @@ ENV NODE_ENV=production
 COPY package*.json ./
 # Se o bcrypt falhar ao instalar no Alpine, descomente a linha abaixo (antes do npm ci):
 # RUN apk add --no-cache python3 make g++
-RUN --mount=type=cache,target=/root/.npm npm ci --omit=dev
+RUN npm ci --omit=dev
 
 COPY . .
 

@@ -15,7 +15,7 @@ export default function Perfil() {
 
    useEffect(() => {
     if (user) {
-      fetch("http://localhost:3000/api/projetos")
+      fetch("/api/projetos")
         .then((res) => res.json())
         .then((data) => {
           if (data.sucesso) {
