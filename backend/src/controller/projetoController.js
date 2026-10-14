@@ -12,7 +12,7 @@ const cadastrarProjeto = async (req, res) => {
         }
 
         await pool.query(
-            "INSERT INTO Projeto (CNPJ, idade_minima, idade_maxima, Local, hora_fun, telefone, email, id, id_mod, descricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO Projeto (CNPJ, idade_minima, idade_maxima, Local, hora_fun, telefone, email, id_user, id_mod, descricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [cnpj, idade_minima, idade_maxima, local, hora_fun, telefone, email, id_user, id_mod, descricao]
         );
 
@@ -31,7 +31,7 @@ const listarProjetos = async (req, res) => {
                 u.nome AS nome_responsavel,
                 m.modalidade AS nome_modalidade
             FROM Projeto p
-            INNER JOIN cadusers u ON p.id = u.id
+            INNER JOIN cadusers u ON p.id_user = u.id
             INNER JOIN Modalidades m ON p.id_mod = m.id_mod
             WHERE p.ativo = true
         `);

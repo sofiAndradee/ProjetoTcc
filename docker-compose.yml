@@ -1,38 +1,54 @@
-version: '3.8'
-
 services:
+  # Front-end React (build) + Nginx
   aula_nginx:
     build: .
     container_name: aula_nginx
     restart: unless-stopped
     ports:
-      - "8080:80" 
+      - "8080:80"
     depends_on:
       - node-app
 
- 
-  # Seu Backend Node.js
+  # Backend Node.js (Express + JWT + bcrypt)
   node-app:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    build: ./backend
+    container_name: node-app
+    restart: unless-stopped
     environment:
-      - DB_HOST=db
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES: ${JWT_EXPIRES:-1d}
     depends_on:
-      - db
- 
-  # Banco de Dados MySQL
+      db:
+        condition: service_healthy
+
+  # Banco de dados MySQL
   db:
     image: mysql:8.0
-    restart: always
+    container_name: db
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: passTcc
-      MYSQL_DATABASE: comuna
-      MYSQL_USER: user_tcc
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3306:3306"   # acessível só da sua máquina (para o Workbench/DBeaver)
     volumes:
       - mysql_data:/var/lib/mysql
- 
+      # Scripts .sql desta pasta rodam UMA vez, quando o volume está vazio
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
 volumes:
   mysql_data:
