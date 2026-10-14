@@ -5,6 +5,7 @@
     padding: 1.5rem 6rem;
     border-bottom: solid 1px #3d3a3ab3;
     background-color: var(--bg);
+    width: 100%;
 
 }
 
@@ -45,6 +46,8 @@ a {
     gap: 40px;
     font-weight: 600;
     font-size: 1rem;
+    max-height: 80px;
+    width: 100%;
 }
 
 .main-nav ul {
@@ -65,16 +68,13 @@ a {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.nav-link {
-    text-decoration: none;
-
-}
 
 .nav-right {
     padding: 10px 15px;
     display: flex;
     align-items: center;
     gap: 24px;
+    position: relative;
 }
 
 
@@ -91,7 +91,7 @@ a {
     padding: 6px;
     box-shadow: rgba(99, 99, 99, 0.163) 0px 2px 8px 1px;
     border-radius: 20px;
-  
+
 
 }
 
@@ -101,23 +101,133 @@ a {
     border: 1px solid #dbdcdd;
 
 }
+/* ===== Avatar + dropdown (sem !important) =====
+   Em vez de !important, todas as regras começam com .avatar-wrap.
+   Isso aumenta a especificidade e vence regras globais como
+   `button { ... }`, `hr { ... }` ou `.navbar button { ... }`. */
 
-.avatar {
-    margin: 10px;
-    padding: 15px 20px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6b3fa0, #8e5ac9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #fff;
-
+.avatar-wrap {
+  position: relative; /* âncora do menu */
+  display: inline-flex;
 }
 
+.avatar-wrap .avatar {
+  box-sizing: border-box;
+  margin: 10px;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6b3fa0, #8e5ac9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.avatar-wrap .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Menu ---------- */
+
+.avatar-wrap .navbar-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  width: 210px;
+  max-width: calc(100vw - 20px);
+  padding: 8px 0;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  text-align: left;
+}
+
+.avatar-wrap .navbar-dropdown-user-info {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 16px;
+}
+
+.avatar-wrap .nav-user-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #c9d1d9;
+}
+
+.avatar-wrap .nav-user-email {
+  font-size: 0.75rem;
+  color: #8b949e;
+}
+
+.avatar-wrap .navbar-dropdown-menu hr {
+  width: 100%;
+  margin: 6px 0;
+  border: 0;
+  border-top: 1px solid #21262d;
+}
+
+/* ---------- Botões do menu ---------- */
+
+.avatar-wrap .navbar-dropdown-menu button {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: left;
+  color: #c9d1d9;
+  cursor: pointer;
+}
+
+.avatar-wrap .navbar-dropdown-menu button:hover,
+.avatar-wrap .navbar-dropdown-menu button:focus-visible {
+  background: #161b22;
+  color: #8a4eff;
+}
+
+.avatar-wrap .navbar-dropdown-menu button:focus-visible {
+  outline: 2px solid #8a4eff;
+  outline-offset: -2px;
+}
+
+.avatar-wrap .navbar-dropdown-menu .nav-menu-signout {
+  color: #ec6e68;
+}
+
+.avatar-wrap .navbar-dropdown-menu .nav-menu-signout:hover,
+.avatar-wrap .navbar-dropdown-menu .nav-menu-signout:focus-visible {
+  background: rgba(248, 81, 73, 0.1);
+  color: #f06b64;
+}
+
+
+.mobile-menu {
+  display: none;
+  transition: opacity 0.4s ease;
+  background-color: var(--bg);
+}
+
+.mobile-menu-icon {
+  display: none;
+}
 .mobile-menu {
     display: none;
     transition: opacity 0.4s ease;
@@ -144,7 +254,9 @@ a {
 .search-wrap {
     flex-shrink: 0;
     display: flex;
-
+    position: relative;
+    width: 40px;
+    height: 40px;
 }
 
 .search-icon {
@@ -158,7 +270,10 @@ a {
     overflow: hidden;
     background: #222222;
     transition: width 0.5s;
-
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
 }
 
 .search-icon:hover {
@@ -178,6 +293,7 @@ a {
     width: 0;
     padding: 0;
     min-width: 0;
+
 }
 
 .search-icon:hover>.search-txt {
@@ -186,7 +302,7 @@ a {
     padding: 0 6px;
 }
 
-.search-btn {
+.search-btn { 
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -194,7 +310,6 @@ a {
     justify-content: center;
     align-items: center;
 }
-
 
 /*  Responsividade */
 
@@ -224,7 +339,7 @@ a {
     }
 
 
-    .btn-cadastro{
+    .btn-cadastro {
         grid-column: 2;
         grid-row: 2;
         margin-left: 0;

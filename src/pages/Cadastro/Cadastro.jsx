@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import logo from "../../assets/logo-comuna-esportes.png";
 import './CadastroStyle.css';
-import { useAuth } from "../../context/AuthContext";
+
 
 
 export default function Cadastro() {
@@ -12,11 +13,30 @@ export default function Cadastro() {
   const [sobrenome, setSobrenome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [endereco, setEndereco] = useState("")
+  const [endereco, setEndereco] = useState("");
+  const [dt_nasc, setDt_nasc] = useState("");
   const [telefone, setTelefone] = useState("");
+
+
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [erro, setErro] = useState("");
+  const { login } = useAuth();
 
+
+  function mascararTelefone(valor) {
+    const d = valor.replace(/\D/g, "").slice(0, 11);
+    if (d.length <= 2) return d.length ? `(${d}` : "";
+    if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    if (d.length <= 10)
+      return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  }
+
+
+ function handleTelefone(e) {
+  setTelefone(mascararTelefone(e.target.value));
+  limparErro("telefone");
+}
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -33,8 +53,6 @@ export default function Cadastro() {
     }
 
 
-    // TODO: enviar os dados para a sua API
-    // await fetch("/api/cadastro", { method: "POST", body: JSON.stringify({ nome, sobrenome, email, senha }) })
     console.log({ nome, sobrenome, email });
 
 
@@ -49,6 +67,7 @@ export default function Cadastro() {
           email,
           telefone,
           endereco,
+          dt_nasc,
           senha,
 
         }),
@@ -64,8 +83,8 @@ export default function Cadastro() {
       navigate("/");
 
 
-    } catch (err) {
-      console.error(err);
+    } catch (erro) {
+      cosole.error(erro);
       setErro("Erro ao conectar com o servidor");
     }
   };
@@ -109,7 +128,6 @@ export default function Cadastro() {
                     onChange={(e) => setSobrenome(e.target.value)}
                     required
                   />
-                  <i className="fas fa-user"></i>
                 </div>
               </div>
             </div>
@@ -123,42 +141,62 @@ export default function Cadastro() {
                   placeholder="seuemail@exemplo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
                   required
                 />
-                <i className="fas fa-envelope"></i>
+
               </div>
             </div>
+
+
             <div className="form-group">
               <label htmlFor="email">Telefone</label>
               <div className="input-wrapper">
                 <input
                   type="text"
                   id="telefone"
-                  placeholder="99999-9999"
+                  placeholder="(11)99999-9999"
                   value={telefone}
-                  onChange={(e) => setTelefone(e.target.value)}
+                  onChange={handleTelefone}
                   autoComplete="email"
                   required
                 />
                 <i className="fas fa-envelope"></i>
               </div>
             </div>
+
+
             <div className="form-group">
               <label htmlFor="endereco">Endereço</label>
               <div className="input-wrapper">
                 <input
                   type="text"
                   id="endereco"
-                  placeholder="rua xxxxxxxx 222 "
+                  placeholder="rua xxxxxxxx"
                   value={endereco}
                   onChange={(e) => setEndereco(e.target.value)}
-                  autoComplete="endereco"
                   required
                 />
-                <i className="fas fa-envelope"></i>
               </div>
             </div>
+
+
+            <div className="form-group">
+              <label htmlFor="dt_nasc">Data de Nascimento</label>
+              <div className="input-wrapper">
+                <input
+                  type="date"
+                  id="dt_nasc"
+                  placeholder="dd/mm/aaaa"
+                  value={dt_nasc}
+                  onChange={(e) => setDt_nasc(e.target.value)}
+                  required
+                />
+
+              </div>
+            </div>
+
+
+
 
             <div className="form-group">
               <label htmlFor="senha">Senha</label>
@@ -171,7 +209,7 @@ export default function Cadastro() {
                   onChange={(e) => setSenha(e.target.value)}
                   required
                 />
-                <i className="fas fa-lock"></i>
+
               </div>
             </div>
 

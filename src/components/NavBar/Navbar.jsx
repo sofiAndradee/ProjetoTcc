@@ -1,26 +1,26 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation ,useNavigate} from "react-router-dom"
 import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
 
 import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuMobileOpen, setmenuMobileOpen] = useState(false);
+  const [dropdownAberto, setDropdownAberto] = useState(false);
   const { pathname } = useLocation();
   const { user, logout } = useAuth();
   const ehAdmin = user?.tipo_acesso === "admin";
   const estaNoLogin = pathname === "/Login";
   const estaNoCadastro = pathname === "/Cadastro";
   const estaNoForms = pathname === "/cadastroProjeto";
+  const navigate = useNavigate();
 
 
-  const iniciais = user?.nome
-    ?.split(" ")
-    .map((parte) => parte[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+  const partes = user?.nome?.trim().split(" ") || [];
+  const iniciais = partes.length > 1
+    ? (partes[0][0] + partes[partes.length - 1][0]).toUpperCase()
+    : partes[0]?.substring(0, 2).toUpperCase();
 
   return (
     <header>
@@ -48,11 +48,7 @@ export default function Navbar() {
               <Link to="/Historia" className="nav-link">Quem somos</Link>
             </li>
 
-            {ehAdmin && (
-              <li className="nav-item">
-                <Link to="/DashBoard" className="nav-link">Painel</Link>
-              </li>
-            )}
+          
           </ul>
         </div>
 
@@ -93,24 +89,47 @@ export default function Navbar() {
 
 
         {user ? (
-          // USUÁRIO LOGADO: mostra o avatar
           <div className="avatar-wrap">
-            <div className="avatar" title={user.nome}>
-              {user.avatar ? (
-                <img src={user.avatar} alt={user.nome} />
-              ) : (
-                iniciais
-              )}
+            <div
+              className="avatar"
+              title={user.nome}
+              onClick={() => setDropdownAberto(!dropdownAberto)}
+            >
+              {user.avatar ? <img src={user.avatar} alt={user.nome} /> : iniciais}
             </div>
 
+            {dropdownAberto && (
+              <div className="navbar-dropdown-menu">
+                <div className="navbar-dropdown-user-info">
+                  <span className="nav-user-name">{user.nome}</span>
+                  <span className="nav-user-email">{user.email.split("@")[0]}</span>
+                </div>
+                <hr />
+
+                <button type="button" onClick={() => { navigate("/Perfil"); setDropdownAberto(false); }}>
+                 Meu Perfil
+                </button>
+
+                {ehAdmin && (
+                  <button type="button" onClick={() => { navigate("/DashBoard"); setDropdownAberto(false); }}>
+                    
+                     Painel Admin
+                  </button>
+                )}
+
+                <hr />
+
+                <button type="button" className="nav-menu-signout" onClick={() => { logout(); setDropdownAberto(false); }}>
+                   Sair da Conta
+                </button>
+              </div>
+            )}
           </div>
         ) : (
-
           !(estaNoLogin || estaNoCadastro || estaNoForms) && (
-            <Link className="btn-cadastro" to="/Login" >cadastre</Link>
+            <Link className="btn-cadastro" to="/Login">cadastre</Link>
           )
         )}
-
 
         {/* PERFIL
         <div className="avatar">
@@ -122,9 +141,9 @@ export default function Navbar() {
         <div className="mobile-menu-icon">
           <button
             className="menu-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={() => setmenuMobileOpen(!menuMobileOpen)}
           >
-            {menuOpen ? "✕" : "☰"}
+            {menuMobileOpen ? "✕" : "☰"}
           </button>
         </div>
 
@@ -132,7 +151,7 @@ export default function Navbar() {
 
 
       {/* MENU MOBILE */}
-      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+      <div className={`mobile-menu ${menuMobileOpen ? "open" : ""}`}>
         <ul>
 
           <li className="nav-item">
@@ -149,12 +168,7 @@ export default function Navbar() {
           <li className="nav-item">
             <Link to="/Historia" className="nav-link">Quem somos</Link>
           </li>
-          
-          {ehAdmin && (
-            <li className="nav-item">
-              <Link to="/DashBoard" className="nav-link">Painel</Link>
-            </li>
-          )}
+
         </ul>
       </div>
     </header >

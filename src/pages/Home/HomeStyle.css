@@ -6,23 +6,23 @@
 }
 
 .home-content {
-    
   flex: 1;
 }
 
 
 /* HERO */
 .hero {
-  max-width: 1300px;
+  max-width: 1400px;
   margin: 30px auto 40px;
   padding: 0 24px;
+
 }
 
 .hero-inner {
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  min-height: 460px;
+  min-height: 570px;
   display: flex;
   align-items: flex-end;
 }
@@ -40,7 +40,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 10%, rgba(0, 0, 0, 0.15) 55%, rgba(0, 0, 0, 0) 80%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.812) 10%, rgba(0, 0, 0, 0.15) 55%, rgba(0, 0, 0, 0) 80%);
   z-index: 1;
 }
 
@@ -110,12 +110,15 @@
 
 /* SPORT PILLS */
 .sports {
-  max-width: 1200px;
-  margin: 0 auto 50px;
-  padding: 0 24px;
+  max-width: 1400px;
+  padding: 0 30px;
   display: flex;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 50px;
+  gap: 25px;
   flex-wrap: wrap;
+
 }
 
 .pill {
@@ -127,7 +130,8 @@
   padding: 16px 26px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
+  gap: 20px;
   font-weight: 700;
   font-size: 1.05rem;
   cursor: pointer;
