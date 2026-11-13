@@ -59,7 +59,7 @@ a {
 
 .nav-item {
     margin: 0 15px;
-    padding: 8px 14px;
+    padding: 4px 14px;
     border-radius: 40px;
     transition: background 0.2s ease;
 }
@@ -184,6 +184,7 @@ a {
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   width: 100%;
   padding: 10px 16px;
@@ -196,26 +197,19 @@ a {
   color: #c9d1d9;
   cursor: pointer;
 }
-
+.avatar-wrap .navbar-dropdown-menu button svg {
+  width: 16px;
+  height: 16px;
+  
+}
 .avatar-wrap .navbar-dropdown-menu button:hover,
 .avatar-wrap .navbar-dropdown-menu button:focus-visible {
   background: #161b22;
-  color: #8a4eff;
-}
-
-.avatar-wrap .navbar-dropdown-menu button:focus-visible {
-  outline: 2px solid #8a4eff;
-  outline-offset: -2px;
-}
-
-.avatar-wrap .navbar-dropdown-menu .nav-menu-signout {
-  color: #ec6e68;
 }
 
 .avatar-wrap .navbar-dropdown-menu .nav-menu-signout:hover,
 .avatar-wrap .navbar-dropdown-menu .nav-menu-signout:focus-visible {
   background: rgba(248, 81, 73, 0.1);
-  color: #f06b64;
 }
 
 

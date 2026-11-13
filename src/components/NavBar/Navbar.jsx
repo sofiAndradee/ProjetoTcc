@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Link, useLocation ,useNavigate} from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
-
 import { useAuth } from "../../context/AuthContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 export default function Navbar() {
   const [menuMobileOpen, setmenuMobileOpen] = useState(false);
@@ -48,7 +50,7 @@ export default function Navbar() {
               <Link to="/Historia" className="nav-link">Quem somos</Link>
             </li>
 
-          
+
           </ul>
         </div>
 
@@ -102,25 +104,31 @@ export default function Navbar() {
               <div className="navbar-dropdown-menu">
                 <div className="navbar-dropdown-user-info">
                   <span className="nav-user-name">{user.nome}</span>
-                  <span className="nav-user-email">{user.email.split("@")[0]}</span>
                 </div>
                 <hr />
 
                 <button type="button" onClick={() => { navigate("/Perfil"); setDropdownAberto(false); }}>
-                 Meu Perfil
+                  Meu Perfil
+                  <span>
+<FontAwesomeIcon icon={faUser} />
+                     </span>
                 </button>
 
                 {ehAdmin && (
                   <button type="button" onClick={() => { navigate("/DashBoard"); setDropdownAberto(false); }}>
-                    
-                     Painel Admin
+
+                    Painel Admin
+
                   </button>
                 )}
 
                 <hr />
 
                 <button type="button" className="nav-menu-signout" onClick={() => { logout(); setDropdownAberto(false); }}>
-                   Sair da Conta
+                  Sair da Conta
+                  <span className="logout-icon">
+                    <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                  </span>
                 </button>
               </div>
             )}
