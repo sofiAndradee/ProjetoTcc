@@ -2,7 +2,7 @@
 .perfil-page-container {
   width: 100% !important;
   max-width: 800px !important;
-  margin: 60px auto 100px !important;
+  margin: 100px auto 100px !important;
   padding: 0 24px !important;
   box-sizing: border-box !important;
   display: block !important;
@@ -75,6 +75,53 @@
   border-bottom: 1px solid #2c2c2c !important;
   width: 100% !important;
 }
+
+.perfil-project-row-card{
+  display: flex ;
+  flex-direction: column !;
+  width: 100% ;
+  margin-top: 24px ;
+  background: rgba(20, 20, 20, 0.5);
+  border: 1px solid #2c2c2c;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  letter-spacing: 0.2px;
+
+}
+
+.project-row-details{
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.status-text-badge.status-aprovado{
+  background: rgba(138, 78, 255, 0.15) !important;
+  color: #8a4eff !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  margin: 8px 0 16px 8px;;
+  border: 1px solid rgba(138, 78, 255, 0.3) !important;
+}
+
+
+.status-text-badge.status-pendente{
+  background: rgba(82, 69, 108, 0.15) !important;
+  color: #3a3447 !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  margin-top: 8px !important;
+  margin-bottom: 16px !important;
+  border: 1px solid rgba(138, 78, 255, 0.3) !important;
+}
+
+
 
 .internal-tab-link {
   background: none !important;
@@ -229,3 +276,8 @@
   border-color: transparent !important;
 }
 
+/* Card de projeto clicável (abre a área de edição) */
+.perfil-project-row-card.clicavel { cursor: pointer; transition: border-color .15s, transform .15s; }
+.perfil-project-row-card.clicavel:hover,
+.perfil-project-row-card.clicavel:focus-visible { border-color: #8a4eff !important; transform: translateY(-1px); outline: none; }
+.project-row-hint { color: #a1a1aa; font-size: 0.85rem; margin-top: 6px !important; }

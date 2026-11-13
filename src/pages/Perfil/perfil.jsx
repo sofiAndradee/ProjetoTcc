@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
+
 import { useAuth } from "../../context/AuthContext";
+
 import { useNavigate } from "react-router-dom";
+
+import ProjetoEditor from "../../components/ProjetoEditor/ProjetoEditor";
+
+import { API } from "../../config/api";
+
 import "./perfilstyle.css";
 
 export default function Perfil() {
@@ -12,27 +19,34 @@ export default function Perfil() {
   // Se for admin, começa na aba "dados". Se for comum, começa em "projetos"
   const [subAba, setSubAba] = useState(ehAdmin ? "dados" : "projetos");
   const [meusProjetos, setMeusProjetos] = useState([]);
+  const [projetoAberto, setProjetoAberto] = useState(null);
 
    useEffect(() => {
     if (user) {
-      fetch("/api/projetos")
+      // Só os projetos APROVADOS deste usuário (o back-end filtra pelo token)
+      fetch(`${API}/projetos/meus`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
         .then((res) => res.json())
         .then((data) => {
-          if (data.sucesso) {
-            // 🔥 CONVERSÃO DE SEGURANÇA: Garante que ambos os IDs virem números puros antes da comparação
-            const filtrados = data.dados.filter((p) => {
-              const idProjetoDono = Number(p.id_user || p.id);
-              const idUsuarioSessao = Number(user.id);
-              return idProjetoDono === idUsuarioSessao;
-            });
-            setMeusProjetos(filtrados);
-          }
+          if (data.sucesso) setMeusProjetos(data.dados);
         })
         .catch((err) => console.error("Erro ao buscar projetos:", err));
     }
   }, [user]);
 
   if (!user) return <p className="sem-resultados-global">Carregando perfil...</p>;
+
+  // Projeto aberto: mostra a área de edição (novidades e eventos)
+  if (projetoAberto) {
+    return (
+      <main className="perfil-page-container">
+        <div className="perfil-box-content">
+          <ProjetoEditor projeto={projetoAberto} onVoltar={() => setProjetoAberto(null)} />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="perfil-page-container">
@@ -54,7 +68,7 @@ export default function Perfil() {
           <p className="perfil-display-bio">
             {ehAdmin 
               ? "Responsável pela moderação de quadras, triagem de propostas esportivas e gerenciamento de segurança do ecossistema Comuna Esportes."
-              : "Membro ativo do Comuna Esportes. Colando junto em prol do esporte, inclusão social e bem-estar nas quadras da Zona Leste. 🏀⚽"
+              : "Membro ativo do Comuna Esportes. Colando junto em prol do esporte, inclusão social e bem-estar nas quadras da Zona Leste."
             }
           </p>
         </section>
@@ -75,7 +89,7 @@ export default function Perfil() {
                 className={`internal-tab-link ${subAba === "config" ? "active" : ""}`}
                 onClick={() => setSubAba("config")}
               >
-                Configurações da Conta
+                Administração
               </button>
             </>
           ) : (
@@ -110,16 +124,8 @@ export default function Perfil() {
                 <label>E-mail de Cadastro</label>
                 <p>{user.email}</p>
               </div>
-              <div className="data-field-card">
-                <label>Tipo de Conta</label>
-                <p style={{ color: ehAdmin ? "#8a4eff" : "#8a4eff", fontWeight: "800" }}>
-                  {ehAdmin ? "ADMIN" : "USUÁRIO COMUM"}
-                </p>
-              </div>
-              <div className="data-field-card">
-                <label>Cidade / Estado</label>
-                <p>{user.endereco || "São Paulo / SP"}</p>
-              </div>
+
+
             </div>
             
             {!ehAdmin && (
@@ -135,21 +141,33 @@ export default function Perfil() {
           <section className="perfil-section-block">
             {meusProjetos.length === 0 ? (
               <div className="perfil-empty-state">
-                <p>Nenhuma proposta de projeto comunitário enviada por este perfil.</p>
+                <p>Você ainda não tem projetos aprovados.</p>
               </div>
             ) : (
               <div className="perfil-projects-stack">
                 {meusProjetos.map((proj) => (
-                  <div key={proj.id_proj} className="perfil-project-row-card">
+                  <div
+                    key={proj.id_proj}
+                    className="perfil-project-row-card clicavel"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setProjetoAberto(proj)}
+                    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setProjetoAberto(proj)}
+                  >
                     <div className="project-row-details">
-                      {/* 🔥 CORRIGIDO: Puxa o campo 'local' minúsculo mapeado do banco de forma segura */}
-                      <h3>{proj.local || proj.Local}</h3>
+                      <h3 style={{borderBottom: "1px solid #2c2c2c", paddingBottom: "10px"}}>
+                        {proj.nome || proj.local}
+                      </h3>
+                      <p>
+                        {proj.modalidades.join(", ")} • {proj.local}
+                      </p>
                       <p>
                         Status da Triagem:{" "}
                         <span className={`status-text-badge status-${proj.status || "pendente"}`}>
                           {(proj.status || "pendente").toUpperCase()}
                         </span>
                       </p>
+                      <p className="project-row-hint">Clique para gerenciar novidades e eventos</p>
                     </div>
                   </div>
                 ))}
@@ -165,24 +183,16 @@ export default function Perfil() {
               
               <div className="settings-item-row" onClick={() => navigate("/DashBoard")}>
                 <div className="settings-item-text">
-                  <h4>Ir para o Painel Geral</h4>
-                  <p>Acesse o gerenciamento de propostas de projetos e triagem pendente.</p>
+                  <h4> Painel Geral</h4>
+                  <p>Acesse o gerenciamento de propostas de projetos pendente.</p>
                 </div>
                 <span className="settings-arrow">➔</span>
-              </div>
-
-              <div className="settings-item-row">
-                <div className="settings-item-text">
-                  <h4>Criptografia JWT Ativa</h4>
-                  <p>Sessão administrativa criptografada e autenticada com sucesso via pool local.</p>
-                </div>
-                <span className="settings-arrow">✔️</span>
               </div>
 
               <hr className="settings-menu-divider" />
 
               <button type="button" className="btn-menu-logout-danger" onClick={logout}>
-                Encerrar Sessão (Logout)
+                Sair (Logout)
               </button>
 
             </div>

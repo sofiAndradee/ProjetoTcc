@@ -1,0 +1,367 @@
+/* Usa a mesma paleta do Perfil (#1c1c1c / #2c2c2c / #8a4eff) */
+.pe,
+.pe-overlay {
+  --pe-bg: #141414;
+  --pe-card: #262626;
+  --pe-line: #2c2c2c;
+  --pe-tx: #ffffff;
+  --pe-mut: #a1a1aa;
+  --pe-pri: #8a4eff;
+  --pe-pri-bg: rgba(138, 78, 255, 0.15);
+  --pe-nov: #e07a4f;
+  --pe-nov-bg: rgba(224, 122, 79, 0.15);
+  --pe-inp: #333333;
+  --pe-danger: #ef4444;
+}
+
+.pe {
+  color: var(--pe-tx);
+}
+
+.pe *,
+.pe-overlay * {
+  box-sizing: border-box;
+}
+
+
+
+.pe button,
+.pe-overlay button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.pe-top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pe-back {
+  background: none;
+  border: 0;
+  font-weight: 700;
+}
+
+.pe-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 8px 0 18px;
+}
+
+.pe-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: var(--pe-pri-bg);
+  flex-shrink: 0;
+}
+
+.pe-head h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+.pe-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  background: var(--pe-bg);
+  padding: 8px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.pe-tabs button {
+  background: none;
+  border: 0;
+  padding: 6px 14px;
+  width: 100%;
+  border-radius: 8px;
+  color: var(--pe-mut);
+  font-size: 14px;
+}
+
+.pe-tabs button[aria-selected="true"] {
+  background: var(--pe-pri-bg);
+  color: var(--pe-pri);
+  font-weight: 700;
+}
+
+.pe-dados {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.pe-dados div {
+  background: var(--pe-card);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.pe-dados dt {
+  font-size: 12px;
+  color: var(--pe-mut);
+  margin-bottom: 4px;
+}
+
+.pe-dados dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.pe-post {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--pe-card);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.pe-post-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pe-post h4 {
+  margin: 6px 0 0;
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+
+.pe-meta {
+  font-size: 12px;
+  color: var(--pe-mut);
+  margin-top: 4px;
+}
+
+.pe-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 14px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.pe-tag.novidade {
+  background: var(--pe-nov-bg);
+  color: var(--pe-nov);
+}
+
+.pe-tag.evento {
+  background: var(--pe-pri-bg);
+  color: var(--pe-pri);
+}
+
+.pe-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pe-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--pe-line);
+  background: var(--pe-bg);
+  display: grid;
+  place-items: center;
+}
+
+.pe-icon-btn:hover {
+  border-color: var(--pe-pri);
+}
+
+.pe-icon-btn.danger:hover {
+  border-color: var(--pe-danger);
+  color: var(--pe-danger);
+}
+
+.pe-add {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--pe-tx);
+  background: none;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.pe-add:hover {
+  background: var(--pe-card);
+}
+
+.pe-empty {
+  text-align: center;
+  color: var(--pe-mut);
+  padding: 28px 0;
+}
+
+.pe-error-box {
+  color: var(--pe-danger);
+}
+
+/* Modal */
+.pe-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.pe-modal {
+  width: 100%;
+  max-width: 440px;
+  max-height: 92vh;
+  overflow: auto;
+  background: var(--pe-card);
+  color: var(--pe-tx);
+  border: 1px solid var(--pe-line);
+  border-radius: 12px;
+}
+
+.pe-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--pe-line);
+  font-size: 14px;
+  color: var(--pe-mut);
+}
+
+.pe-modal-head button {
+  background: var(--pe-bg);
+  border: 1px solid var(--pe-line);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+}
+
+.pe-modal-body {
+  padding: 16px;
+}
+
+.pe-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.pe-switch button {
+  flex: 1;
+  padding: 14px 6px;
+  border-radius: 10px;
+  border: 1px solid var(--pe-line);
+  background: var(--pe-bg);
+  color: var(--pe-mut);
+  font-weight: 700;
+}
+
+.pe-switch button[aria-pressed="true"].novidade {
+  background: var(--pe-nov-bg);
+  color: var(--pe-nov);
+  border-color: var(--pe-nov);
+}
+
+.pe-switch button[aria-pressed="true"].evento {
+  background: var(--pe-pri-bg);
+  color: var(--pe-pri);
+  border-color: var(--pe-pri);
+}
+
+.pe-modal label {
+  display: block;
+  font-size: 13px;
+  margin: 12px 0 6px;
+}
+
+.pe-modal input[type="text"],
+.pe-modal input[type="date"],
+.pe-modal textarea {
+  width: 100%;
+  background: var(--pe-inp);
+  color: var(--pe-tx);
+  border: 1px solid var(--pe-line);
+  border-radius: 6px;
+  padding: 9px;
+  font: inherit;
+}
+
+.pe-modal textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.pe-modal .invalid {
+  border-color: var(--pe-danger);
+}
+
+.pe-error {
+  color: var(--pe-danger);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.pe-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.pe-chip {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--pe-line);
+  background: var(--pe-bg);
+  color: var(--pe-mut);
+}
+
+.pe-chip[aria-pressed="true"] {
+  border-color: var(--pe-pri);
+  color: var(--pe-pri);
+  background: var(--pe-pri-bg);
+}
+
+.pe-publish {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.pe-publish button {
+  background: var(--pe-bg);
+  border: 1px solid var(--pe-line);
+  border-radius: 8px;
+  padding: 8px 18px;
+}
+
+.pe-publish button:hover:not(:disabled) {
+  border-color: var(--pe-pri);
+}
+
+.pe-publish button:disabled {
+  opacity: .5;
+  cursor: default;
+}
+
+.pe button:focus-visible,
+.pe-overlay button:focus-visible,
+.pe-overlay input:focus-visible,
+.pe-overlay textarea:focus-visible {
+  outline: 2px solid var(--pe-pri);
+  outline-offset: 2px;
+}

@@ -1,3 +1,4 @@
+import { API } from "../../config/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -35,7 +36,6 @@ export default function Cadastro() {
 
  function handleTelefone(e) {
   setTelefone(mascararTelefone(e.target.value));
-  limparErro("telefone");
 }
 
   async function handleSubmit(e) {
@@ -56,37 +56,52 @@ export default function Cadastro() {
     console.log({ nome, sobrenome, email });
 
 
-    try {
-      const nomeCompleto = `${nome} ${sobrenome}`.trim();
+  try {
+    const nomeCompleto = `${nome} ${sobrenome}`.trim();
 
-      const res = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nome: nomeCompleto,
-          email,
-          telefone,
-          endereco,
-          dt_nasc,
-          senha,
+    const res = await fetch(`${API}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nome: nomeCompleto,
+        email,
+        telefone,
+        endereco,
+        dt_nasc,
+        senha
+      })
+    });
 
-        }),
-      });
+    // Primeiro, verifica a resposta do servidor
+    const texto = await res.text();
 
-      const data = await res.json();
-
-      if (!data.sucesso) {
-        setErro(data.mensagem);
-        return;
-      }
-      login(data.dados);
-      navigate("/");
-
-
-    } catch (erro) {
-      console.error(erro);
-      setErro("Erro ao conectar com o servidor");
+    // Verifica se o servidor retornou algum conteúdo
+    if (!texto) {
+      throw new Error("O servidor retornou uma resposta vazia.");
     }
+
+    // Converte a resposta para JSON
+    const data = JSON.parse(texto);
+
+    // Verifica se a requisição foi bem-sucedida
+    if (!res.ok) {
+      throw new Error(data.mensagem || `Erro HTTP ${res.status}`);
+    }
+
+    if (!data.sucesso) {
+      setErro(data.mensagem || "Não foi possível realizar o cadastro.");
+      return;
+    }
+
+    login(data.dados);
+    navigate("/");
+
+  } catch (erro) {
+    console.error("Erro no cadastro:", erro);
+    setErro(erro.message || "Erro ao conectar com o servidor");
+  }
   };
 
 
