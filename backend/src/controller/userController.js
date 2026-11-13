@@ -20,7 +20,6 @@ const ListarUsuarios = async (req, res) => {
         res.status(500).json({ sucesso: false, mensagem: "Erro ao listar usuários", erro: error.message });
     }
 };
-
 // =========================================================================
 // 2. CADASTRAR NOVO USUÁRIO (POST)
 // =========================================================================
@@ -49,7 +48,6 @@ const adicionarUsuario = async (req, res) => {
         res.status(500).json({ sucesso: false, mensagem: error.message });
     }
 };
-
 // =========================================================================
 // 3. EFETUAR AUTENTICAÇÃO / LOGIN (POST - O bloco que você colou!)
 // =========================================================================
@@ -63,14 +61,15 @@ const efetuarLogin = async (req, res) => {
 
         // Busca na tabela 'cadusers' que criamos no seu MySQL
         const [linhas] = await db.query(
-            "SELECT id, nome, email, senha, tipo_acesso FROM cadusers  WHERE email = ?",
+            "SELECT id, nome, email, senha, tipo_acesso FROM cadusers WHERE email = ? AND ativo = true",
             [email]
 
 
         );
 
         if (linhas.length === 0) {
-            return res.status(404).json({ sucesso: false, mensagem: "Usuário não encontrado ou inativo." });
+            // Mesma resposta de "senha errada": não revela se o e-mail existe
+            return res.status(401).json({ sucesso: false, mensagem: "E-mail ou senha inválidos." });
         }
 
         const usuario = linhas[0];
@@ -87,7 +86,7 @@ const efetuarLogin = async (req, res) => {
                 tipo_acesso: usuario.tipo_acesso
             },
             process.env.JWT_SECRET,
-            { expiresIn: "2h" }
+            { expiresIn: process.env.JWT_EXPIRES || "2h" }
         );
 
         res.status(200).json({
@@ -101,7 +100,6 @@ const efetuarLogin = async (req, res) => {
         res.status(500).json({ sucesso: false, mensagem: "Erro interno de autenticação", erro: error.message });
     }
 };
-
 // Exporta as três funções juntas para o arquivo de rotas ler
 module.exports = {
     ListarUsuarios,
