@@ -1,3 +1,4 @@
+import { API } from "../../config/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo-comuna-esportes.png";
@@ -22,28 +23,39 @@ function Login() {
     e.preventDefault();
     setErro("");
 
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha }),
-      });
+  try {
+    const res = await fetch(`${API}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, senha }),
+    });
 
-      const data = await res.json();
+    const texto = await res.text();
 
-      if (!data.sucesso) {
-        setErro(data.mensagem);
-        return;
-      }
-
-      login(data.token);
-      navigate("/");
-      // redirecionar ou salvar o usuário no estado global aqui
-
-    } catch (err) {
-      console.error(err);
-      setErro("Erro ao conectar com o servidor");
+    if (!texto) {
+      throw new Error("O servidor retornou uma resposta vazia.");
     }
+
+    const data = JSON.parse(texto);
+
+    if (!res.ok) {
+      throw new Error(data.mensagem || `Erro HTTP ${res.status}`);
+    }
+
+    if (!data.sucesso) {
+      setErro(data.mensagem || "E-mail ou senha incorretos.");
+      return;
+    }
+
+    login(data.token);
+    navigate("/");
+
+  } catch (err) {
+    console.error("Erro no login:", err);
+    setErro(err.message || "Erro ao conectar com o servidor");
+  }
   };
 
   return (

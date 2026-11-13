@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CadastroProj.css";
 
-// Enquanto não houver API, usamos esta lista. Os ids batem com a tabela Modalidades.
-// Depois, troque por um fetch: GET /modalidades (apenas aprovada = TRUE).
+import { API } from "../../config/api";
+
+// Lista padrão: as caixas aparecem sempre. Quando o back-end responde,
+// ela é substituída pelas modalidades reais do banco (GET /modalidades).
 const MODALIDADES_CATALOGO = [
   { id_mod: 1, modalidade: "Artes marciais" },
   { id_mod: 2, modalidade: "Futebol" },
@@ -36,6 +38,22 @@ const estadoInicial = {
 function normalizar(texto) {
   const limpo = texto.trim().replace(/\s+/g, " ");
   return limpo.charAt(0).toUpperCase() + limpo.slice(1).toLowerCase();
+}
+
+// Compara nomes sem diferenciar maiúsculas, acentos e espaços extras ("Vôlei" = "volei")
+function chave(texto) {
+  return texto.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ");
+}
+
+// Mantém só a primeira ocorrência de cada modalidade
+function semRepetidas(lista) {
+  const vistas = new Set();
+  return lista.filter((m) => {
+    const k = chave(m.modalidade);
+    if (vistas.has(k)) return false;
+    vistas.add(k);
+    return true;
+  });
 }
 
 // Aceita CNPJ numérico e o alfanumérico (novo formato). Mantém só letras e números.
@@ -96,6 +114,17 @@ export default function InscreverProjeto() {
   const [outraTexto, setOutraTexto] = useState("");
   const [diasSel, setDiasSel] = useState([]);
   const [erros, setErros] = useState({});
+  const [catalogo, setCatalogo] = useState(MODALIDADES_CATALOGO);
+  const [enviando, setEnviando] = useState(false);
+
+  useEffect(() => {
+    fetch(`${API}/modalidades`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.dados && d.dados.length > 0) setCatalogo(semRepetidas(d.dados));
+      })
+      .catch(() => {}); // sem back-end, continua com a lista padrão
+  }, []);
 
   function limparErro(campo) {
     setErros((e) => (e[campo] ? { ...e, [campo]: undefined } : e));
@@ -149,7 +178,7 @@ export default function InscreverProjeto() {
     return [...new Set(lista)];
   }
 
-  function validar(outras) {
+  function validar(outras, selecionadas, digitadas) {
     const e = {};
 
     if (!cnpjValido(form.cnpj)) e.cnpj = "CNPJ inválido. Confira os dígitos.";
@@ -173,12 +202,12 @@ export default function InscreverProjeto() {
     const telDigitos = form.telefone.replace(/\D/g, "");
     if (telDigitos.length < 10) e.telefone = "Telefone incompleto.";
 
-    const total = modalidadesSel.length + outras.length;
-    if (outraAtiva && outras.length === 0) {
+    const total = selecionadas.length + outras.length;
+    if (outraAtiva && digitadas.length === 0) {
       e.modalidades =
         "Digite o nome da outra modalidade ou desmarque a opção.";
-    } else if (total === 0) {
-      e.modalidades = "Selecione pelo menos uma modalidade.";
+    } else if (total === 0 || selecionadas.length === 0) {
+      e.modalidades = "Selecione pelo menos uma modalidade da lista.";
     } else if (total > MAX_MODALIDADES) {
       e.modalidades = `Escolha no máximo ${MAX_MODALIDADES} modalidades.`;
     } else if (outras.some((t) => t.length > MAX_CARACTERES_OUTRA)) {
@@ -188,11 +217,19 @@ export default function InscreverProjeto() {
     return e;
   }
 
-  function handleSubmit(ev) {
+  async function handleSubmit(ev) {
     ev.preventDefault();
+    if (enviando) return;
 
-    const outras = extrairOutras();
-    const novosErros = validar(outras);
+    // Se o que foi digitado em "Outra" já existe na lista, usa a modalidade existente
+    // em vez de criar uma nova.
+    const digitadas = extrairOutras();
+    const existe = (t) => catalogo.find((m) => chave(m.modalidade) === chave(t));
+    const outras = digitadas.filter((t) => !existe(t));
+    const selecionadas = [
+      ...new Set([...modalidadesSel, ...digitadas.map(existe).filter(Boolean).map((m) => m.id_mod)]),
+    ];
+    const novosErros = validar(outras, selecionadas, digitadas);
     setErros(novosErros);
 
     if (Object.keys(novosErros).length > 0) {
@@ -220,17 +257,36 @@ export default function InscreverProjeto() {
       telefone: form.telefone,
       email: form.email.trim(),
       descricao: form.descricao.trim(),
-      modalidades: modalidadesSel, // ids do catálogo
+      modalidades: selecionadas, // ids do catálogo
       outras_modalidades: outras, // viram sugestão (aprovada = FALSE)
     };
 
-    // TODO: enviar `payload` para a sua API
-    console.log(payload);
+    setEnviando(true);
+    try {
+      const resp = await fetch(`${API}/projetos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      const dados = await resp.json();
 
-    alert(
-      "Proposta enviada com sucesso! Nossa equipe entrará em contato para validar o cadastro."
-    );
-    navigate("/");
+      if (!resp.ok) {
+        alert(dados.mensagem || "Não foi possível enviar a proposta.");
+        return;
+      }
+
+      alert(
+        "Proposta enviada com sucesso! Nossa equipe entrará em contato para validar o cadastro."
+      );
+      navigate("/");
+    } catch {
+      alert("Erro de conexão com o servidor. Tente novamente.");
+    } finally {
+      setEnviando(false);
+    }
   }
 
   // Atributos para marcar o campo com erro (acessibilidade + scroll)
@@ -285,7 +341,7 @@ export default function InscreverProjeto() {
           <p className="campo-ajuda">Marque todas as que o projeto oferece.</p>
 
           <div className="checkbox-grid" {...erroProps("modalidades")}>
-            {MODALIDADES_CATALOGO.map((m) => (
+            {catalogo.map((m) => (
               <label key={m.id_mod} className="checkbox-item">
                 <input
                   type="checkbox"
@@ -472,8 +528,8 @@ export default function InscreverProjeto() {
           />
         </div>
 
-        <button type="submit" className="btn-submit">
-          Enviar Proposta
+        <button type="submit" className="btn-submit" disabled={enviando}>
+          {enviando ? "Enviando..." : "Enviar Proposta"}
         </button>
       </form>
     </div>
