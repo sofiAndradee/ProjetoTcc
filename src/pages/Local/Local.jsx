@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 import Navbar from "../../components/NavBar/Navbar";
@@ -64,6 +64,29 @@ export const dadosEsportes = [
   
 ];
 
+import { API } from "../../config/api";
+
+// "Artes marciais" (banco) e "Lutas Marciais" (botão do filtro) são a mesma categoria
+function normalizarCategoria(c) {
+  return c.toLowerCase().trim().replace("artes marciais", "lutas marciais");
+}
+
+// Projeto aprovado (vindo do banco) -> formato do CardLocal
+function paraCard(p) {
+  const semLimite = p.idade_minima === 0 && p.idade_maxima >= 100;
+  const horario = (p.hora_fun || "").replace("-", " - ");
+  return {
+    id: `proj-${p.id_proj}`,
+    titulo: p.nome || "Projeto comunitário",
+    faixaEtaria: semLimite ? "Todas as idades" : `${p.idade_minima} a ${p.idade_maxima} anos`,
+    local: p.local,
+    telefone: p.telefone,
+    horario: p.dias_funcionamento ? `${p.dias_funcionamento} • ${horario}` : horario,
+    categorias: p.modalidades || [],
+    linkMaps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.local)}`,
+  };
+}
+
 function Locais() {
 
   // Categoria atualmente selecionada
@@ -72,15 +95,30 @@ function Locais() {
   // Texto digitado pelo usuário
   const [termoBusca, setTermoBusca] = useState("");
 
+  // Projetos aprovados pelo administrador (vêm do banco)
+  const [projetosAprovados, setProjetosAprovados] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API}/projetos`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.sucesso) setProjetosAprovados(data.dados.map(paraCard));
+      })
+      .catch((err) => console.error("Erro ao buscar projetos:", err));
+  }, []);
+
+  const todosOsLocais = [...dadosEsportes, ...projetosAprovados];
+
 
   // Filtra os locais
-  const dadosFiltrados = dadosEsportes.filter((item) => {
+  const dadosFiltrados = todosOsLocais.filter((item) => {
 
-    const categoriaItem = item.categoria.toLowerCase().trim();
+    // Projetos do banco podem ter várias modalidades; os exemplos fixos têm uma só
+    const categoriasItem = (item.categorias ?? [item.categoria]).map(normalizarCategoria);
 
     const bateuCategoria =
       filtroCategoria === "todos" ||
-      categoriaItem === filtroCategoria;
+      categoriasItem.includes(normalizarCategoria(filtroCategoria));
 
 
     const buscaTratada =

@@ -14,8 +14,8 @@
 
 .tag {
   display: inline-block;
-  background: rgba(255, 95, 162, 0.15);
-  color: var(--accent-pink);
+  background: #a45fff19;;
+  color: #a45fff;;
   font-size: 0.8rem;
   font-weight: 700;
   padding: 6px 14px;

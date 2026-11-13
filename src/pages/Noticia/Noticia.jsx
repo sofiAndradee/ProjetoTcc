@@ -3,7 +3,8 @@ import CardEvento from "../../components/CardEvento/CardEvento";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/NavBar/Navbar";
 import PesquisaFiltro from "../../components/Filtro/Filtro";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { API } from "../../config/api";
 
 
 const dadosEvento = [
@@ -29,6 +30,23 @@ const dadosEvento = [
 
 
 
+// O filtro usa "lutas marciais"; no banco a modalidade se chama "artes marciais"
+const CATEGORIA = { "artes marciais": "lutas marciais" };
+
+function paraCard(p) {
+    const cat = String(p.modalidade || "").toLowerCase();
+    return {
+        id: `pub-${p.id_pub}`,
+        nomeProjeto: p.nome_projeto,
+        tituloEvento: p.titulo,
+        descricaoEvento: p.descricao,
+        categoria: CATEGORIA[cat] || cat,
+        tipo: p.tipo,
+        dataEvento: p.data,
+        local: p.local,
+    };
+}
+
 export default function Noticia() {
     // Categoria atualmente selecionada
     const [filtroCategoria, setFiltroCategoria] = useState("todos");
@@ -36,9 +54,22 @@ export default function Noticia() {
     // Texto digitado pelo usuário
     const [termoBusca, setTermoBusca] = useState("");
 
+    // Publicações reais dos projetos (novidades e eventos)
+    const [publicacoes, setPublicacoes] = useState([]);
+
+    useEffect(() => {
+        fetch(`${API}/publicacoes`)
+            .then((res) => res.json())
+            .then((json) => { if (json.sucesso) setPublicacoes(json.dados.map(paraCard)); })
+            .catch((err) => console.error("Erro ao buscar publicações:", err));
+    }, []);
+
+    // Reais primeiro; os itens estáticos de exemplo continuam por enquanto
+    const todosItens = [...publicacoes, ...dadosEvento];
+
 
     // Filtra os locais
-    const dadosFiltrados = dadosEvento.filter((item) => {
+    const dadosFiltrados = todosItens.filter((item) => {
 
         const categoriaItem = item.categoria.toLowerCase().trim();
 
@@ -91,10 +122,10 @@ export default function Noticia() {
                    
                              ) : (
                    
-                               dadosFiltrados.map((item) => (
+                               dadosFiltrados.map((item, i) => (
                    
                                  <CardEvento
-                                   key={item.id}
+                                   key={`${item.id}-${i}`}
                                    dados={item}
                                  />
                    
