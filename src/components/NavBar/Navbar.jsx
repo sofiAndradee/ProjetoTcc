@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
 import { useAuth } from "../../context/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 export default function Navbar() {
@@ -17,6 +17,46 @@ export default function Navbar() {
   const estaNoCadastro = pathname === "/Cadastro";
   const estaNoForms = pathname === "/cadastroProjeto";
   const navigate = useNavigate();
+
+  // ---- Busca ----
+  const [params] = useSearchParams();
+  const estaNaBusca = pathname === "/Busca";
+  const [busca, setBusca] = useState(params.get("q") || "");
+  const inputBuscaRef = useRef(null);
+
+  // Mantém o campo igual ao ?q= da URL (ex.: botão voltar, link compartilhado)
+  // e limpa o campo ao sair da página de busca.
+  const qDaUrl = params.get("q") || "";
+  useEffect(() => {
+    // Só sobrescreve se for diferente: a URL guarda o termo sem espaços nas pontas,
+    // e não podemos apagar o espaço que o usuário acabou de digitar entre duas palavras.
+    setBusca((atual) => {
+      if (!estaNaBusca) return "";
+      return atual.trim() === qDaUrl ? atual : qDaUrl;
+    });
+  }, [estaNaBusca, qDaUrl]);
+
+  const irParaBusca = (texto, { substituir = false } = {}) => {
+    const termo = texto.trim();
+    navigate(termo ? `/Busca?q=${encodeURIComponent(termo)}` : "/Busca", { replace: substituir });
+  };
+
+  const enviarBusca = (e) => {
+    e.preventDefault();
+    if (!busca.trim()) {
+      inputBuscaRef.current?.focus(); // no celular, o toque na lupa abre o campo
+      return;
+    }
+    irParaBusca(busca);
+    setmenuMobileOpen(false);
+  };
+
+  // Enquanto o usuário digita dentro da página de busca, os resultados acompanham
+  const aoDigitar = (e) => {
+    const valor = e.target.value;
+    setBusca(valor);
+    if (estaNaBusca) irParaBusca(valor, { substituir: true });
+  };
 
 
   const partes = user?.nome?.trim().split(" ") || [];
@@ -55,35 +95,24 @@ export default function Navbar() {
         </div>
 
         <div className="search-wrap">
-          <div className="search-icon">
+          <form className="search-icon" role="search" onSubmit={enviarBusca}>
 
             <input
-              type="text"
+              ref={inputBuscaRef}
+              type="search"
               className="search-txt"
               placeholder="Pesquisar..."
+              aria-label="Pesquisar notícias, eventos e projetos"
+              value={busca}
+              onChange={aoDigitar}
+              maxLength={100}
             />
 
-            <a className="search-btn" aria-label="Pesquisar">
-              <svg
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <line
-                  x1="21"
-                  y1="21"
-                  x2="16.65"
-                  y2="16.65"
-                />
-              </svg>
-            </a>
+            <button type="submit" className="search-btn">
+              <FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#ffffff",}} />
+            </button>
 
-          </div>
+          </form>
         </div>
 
 

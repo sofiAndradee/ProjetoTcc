@@ -268,6 +268,7 @@ a {
     right: 0;
     top: 0;
     z-index: 10;
+    border: 1px solid #ffffff49;
 }
 
 .search-icon:hover {
@@ -303,6 +304,8 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: none;
+    border: none;
 }
 
 /*  Responsividade */

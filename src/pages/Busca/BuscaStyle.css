@@ -1,0 +1,178 @@
+.busca-page {
+  max-width: 1200px;
+        min-height: 500px;
+
+  margin: 40px auto 60px;
+  padding: 0 24px;
+}
+
+.busca-header h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  color: #dcd4e6bb;
+
+}
+
+.busca-termo {
+  color: #a45fff;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+
+}
+
+.busca-resumo {
+  margin-top: 6px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+.busca-aviso {
+  margin-top: 24px;
+  color: var(--text-dim);
+}
+
+.busca-erro {
+  color: #ff7b72;
+}
+
+/* ---- abas ---- */
+.busca-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 28px 0 8px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.busca-aba {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #333;
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.busca-aba:hover {
+  color: var(--text);
+  border-color: #43009a;
+}
+
+.busca-aba.ativa {
+  color: #fff;
+  background: #43009a;
+  border-color: #43009a;
+}
+
+.busca-contador {
+  display: inline-block;
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---- seções ---- */
+.busca-secao {
+  margin-top: 36px;
+}
+
+.busca-secao h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.busca-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0 20px;
+}
+
+.busca-grade > * {
+  min-width: 0;
+}
+
+/* CardLocal já tem margem própria de 20px */
+.busca-grade-projetos {
+  margin: 0 -20px;
+}
+
+/* ---- sem resultados ---- */
+.busca-vazio {
+  margin-top: 40px;
+  padding: 40px 24px;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid #2c2c2c;
+  border-radius: 16px;
+}
+
+.busca-vazio p:first-child {
+  font-size: 1.15rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.busca-dica {
+  margin-top: 8px;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.busca-atalhos {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.busca-atalhos a {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid #43009a;
+  color: #cdb0ff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.busca-atalhos a:hover {
+  background: rgba(67, 0, 154, 0.35);
+}
+
+@media (max-width: 480px) {
+  .busca-page {
+    padding: 0 16px;
+    margin-top: 28px;
+  }
+
+  .busca-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .busca-grade {
+    grid-template-columns: 1fr;
+  }
+
+  .busca-grade-projetos {
+    margin: 0 -12px;
+  }
+}

@@ -5,7 +5,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter , Route , Routes} from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
-
 import Home  from './pages/Home/Home';
 import Local  from './pages/Local/Local';
 import Noticia from './pages/Noticia/Noticia';
@@ -23,6 +22,7 @@ import Futebol from "./pages/Futebol/Futebol";
 import Volei from "./pages/Volei/Volei";
 import Basquete from "./pages/Basquete/Basquete";
 import ArtesMarciais from "./pages/ArtesMarciais/ArtesMarciais";
+import Busca from './pages/Busca/Busca';
 
 
 createRoot(document.getElementById('root')).render(
@@ -40,6 +40,7 @@ createRoot(document.getElementById('root')).render(
       <Route path='/Volei' element={<Volei/>}/>
       <Route path='/Basquete' element={<Basquete/>}/>
       <Route path='/ArtesMarciais' element={<ArtesMarciais/>}/>
+      <Route path='/Busca' element={<Busca/>}/>
 
 
       <Route path='/Login' element={

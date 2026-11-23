@@ -3,6 +3,8 @@
   max-width: 1200px;
   margin: 50px auto 50px ;
   padding: 0 24px;
+  min-height: 500px;
+
 }
 
 .noticia h2 {
