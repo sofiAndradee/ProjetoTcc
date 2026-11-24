@@ -3,6 +3,19 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 10;
 
+// Gera o token de sessão (usado no login e no cadastro, para o usuário já entrar logado)
+const gerarToken = (usuario) =>
+    jwt.sign(
+        {
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            tipo_acesso: usuario.tipo_acesso
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES || "2h" }
+    );
+
 // =========================================================================
 // 1. LISTAR TODOS OS USUÁRIOS ATIVOS (GET)
 // =========================================================================
@@ -38,12 +51,15 @@ const adicionarUsuario = async (req, res) => {
         }
         const senhaHash = await bcrypt.hash(senha, SALT_ROUNDS);
 
-        await db.query(
+        const [resultado] = await db.query(
             "INSERT INTO cadusers (nome, email, telefone, endereco, dt_nasc, senha, tipo_acesso) VALUES (?, ?, ?, ?, ?, ?, 'comum')",
             [nome, email, telefone, endereco, dt_nasc, senhaHash]
         );
-        
-        res.status(201).json({ sucesso: true, mensagem: "Usuário cadastrado com sucesso via Pool!" });
+
+        // Login automático: devolve o token já no cadastro (tipo_acesso é sempre 'comum' aqui)
+        const token = gerarToken({ id: resultado.insertId, nome, email, tipo_acesso: "comum" });
+
+        res.status(201).json({ sucesso: true, mensagem: "Usuário cadastrado com sucesso!", token });
     } catch (error) {
         res.status(500).json({ sucesso: false, mensagem: error.message });
     }
@@ -78,16 +94,7 @@ const efetuarLogin = async (req, res) => {
         if (!usuario || !senhaConfere) {
             return res.status(401).json({ sucesso: false, mensagem: "E-mail ou senha inválidos." });
         }
-        const token = jwt.sign(
-            {
-                id: usuario.id,
-                nome: usuario.nome,
-                email: usuario.email,
-                tipo_acesso: usuario.tipo_acesso
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRES || "2h" }
-        );
+        const token = gerarToken(usuario);
 
         res.status(200).json({
             sucesso: true,

@@ -95,8 +95,13 @@ export default function Cadastro() {
       return;
     }
 
-    login(data.dados);
-    navigate("/");
+    // O backend devolve o token no cadastro: o usuário já entra logado
+    if (data.token) {
+      login(data.token);
+      navigate("/");
+    } else {
+      navigate("/Login"); // segurança: se por algum motivo não vier token, pede o login
+    }
 
   } catch (erro) {
     console.error("Erro no cadastro:", erro);
