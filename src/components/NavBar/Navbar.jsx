@@ -4,7 +4,7 @@ import "./NavbarStyle.css"
 import logo from "../../assets/logo-comuna-esportes.png";
 import { useAuth } from "../../context/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 export default function Navbar() {
@@ -63,6 +63,12 @@ export default function Navbar() {
   const iniciais = partes.length > 1
     ? (partes[0][0] + partes[partes.length - 1][0]).toUpperCase()
     : partes[0]?.substring(0, 2).toUpperCase();
+   
+const primeiroNome = partes[0] || '';
+const ultimoNome = partes.length > 1 ? partes[partes.length - 1] : '';
+
+// Se você quiser os dois juntos em uma única string (Ex: "João Silva"):
+const nomeResumido = ultimoNome ? `${primeiroNome} ${ultimoNome}` : primeiroNome;
 
   return (
     <header>
@@ -109,7 +115,7 @@ export default function Navbar() {
             />
 
             <button type="submit" className="search-btn">
-              <FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#ffffff",}} />
+              <FontAwesomeIcon icon={faMagnifyingGlass} style={{ color: "#ffffff", }} />
             </button>
 
           </form>
@@ -132,15 +138,18 @@ export default function Navbar() {
             {dropdownAberto && (
               <div className="navbar-dropdown-menu">
                 <div className="navbar-dropdown-user-info">
-                  <span className="nav-user-name">{user.nome}</span>
+                  <span className="nav-user-name">{user.nome && nomeResumido}</span>
                 </div>
                 <hr />
 
                 <button type="button" onClick={() => { navigate("/Perfil"); setDropdownAberto(false); }}>
-                  Meu Perfil
+                  
+
+                  Perfil
+                  
                   <span>
-<FontAwesomeIcon icon={faUser} />
-                     </span>
+                    <FontAwesomeIcon icon={faUser} />
+                  </span>
                 </button>
 
                 {ehAdmin && (
@@ -154,8 +163,9 @@ export default function Navbar() {
                 <hr />
 
                 <button type="button" className="nav-menu-signout" onClick={() => { logout(); setDropdownAberto(false); }}>
+
                   Sair da Conta
-                  <span className="logout-icon">
+                                  <span className="logout-icon">
                     <FontAwesomeIcon icon={faArrowRightFromBracket} />
                   </span>
                 </button>

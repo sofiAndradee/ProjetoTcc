@@ -7,21 +7,23 @@ import { useNavigate } from "react-router-dom";
 import ProjetoEditor from "../../components/ProjetoEditor/ProjetoEditor";
 
 import { API } from "../../config/api";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRightFromBracket, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 import "./perfilstyle.css";
 
 export default function Perfil() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  
+
   const ehAdmin = user?.tipo_acesso === "admin";
-  
+
   // Se for admin, começa na aba "dados". Se for comum, começa em "projetos"
   const [subAba, setSubAba] = useState(ehAdmin ? "dados" : "projetos");
   const [meusProjetos, setMeusProjetos] = useState([]);
   const [projetoAberto, setProjetoAberto] = useState(null);
 
-   useEffect(() => {
+  useEffect(() => {
     if (user) {
       // Só os projetos APROVADOS deste usuário (o back-end filtra pelo token)
       fetch(`${API}/projetos/meus`, {
@@ -51,22 +53,20 @@ export default function Perfil() {
   return (
     <main className="perfil-page-container">
       <div className="perfil-box-content">
-        
+
         {/* HEADER DO PERFIL */}
         <section className="perfil-info-header">
           <div className="perfil-avatar-circle-large">
             {user.nome ? user.nome.charAt(0).toUpperCase() : "U"}
           </div>
           <h1 className="perfil-display-name">{user.nome}</h1>
-          
-          {ehAdmin ? (
+
+          {ehAdmin &&(
             <p className="perfil-admin-badge">ADMIN</p>
-          ) : (
-            <p className="perfil-user-badge">MEMBRO COMUNA</p>
           )}
 
           <p className="perfil-display-bio">
-            {ehAdmin 
+            {ehAdmin
               ? "Responsável pela moderação de quadras, triagem de propostas esportivas e gerenciamento de segurança do ecossistema Comuna Esportes."
               : "Membro ativo do Comuna Esportes. Colando junto em prol do esporte, inclusão social e bem-estar nas quadras da Zona Leste."
             }
@@ -77,15 +77,15 @@ export default function Perfil() {
         <div className="perfil-internal-tabs">
           {ehAdmin ? (
             <>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className={`internal-tab-link ${subAba === "dados" ? "active" : ""}`}
                 onClick={() => setSubAba("dados")}
               >
-              Meus Dados
+                Meus Dados
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className={`internal-tab-link ${subAba === "config" ? "active" : ""}`}
                 onClick={() => setSubAba("config")}
               >
@@ -94,15 +94,15 @@ export default function Perfil() {
             </>
           ) : (
             <>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className={`internal-tab-link ${subAba === "projetos" ? "active" : ""}`}
                 onClick={() => setSubAba("projetos")}
               >
                 Minhas Propostas
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className={`internal-tab-link ${subAba === "dados" ? "active" : ""}`}
                 onClick={() => setSubAba("dados")}
               >
@@ -127,7 +127,7 @@ export default function Perfil() {
 
 
             </div>
-            
+
             {!ehAdmin && (
               <button type="button" className="btn-logout-comum" onClick={logout}>
                 Sair (Logout)
@@ -155,7 +155,7 @@ export default function Perfil() {
                     onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setProjetoAberto(proj)}
                   >
                     <div className="project-row-details">
-                      <h3 style={{borderBottom: "1px solid #2c2c2c", paddingBottom: "10px"}}>
+                      <h3 style={{ borderBottom: "1px solid #2c2c2c", paddingBottom: "10px" }}>
                         {proj.nome || proj.local}
                       </h3>
                       <p>
@@ -180,19 +180,23 @@ export default function Perfil() {
         {subAba === "config" && ehAdmin && (
           <section className="perfil-section-block">
             <div className="perfil-settings-stack">
-              
+
               <div className="settings-item-row" onClick={() => navigate("/DashBoard")}>
                 <div className="settings-item-text">
-                  <h4> Painel Geral</h4>
+                  <h4> Painel Administrativo</h4>
                   <p>Acesse o gerenciamento de propostas de projetos pendente.</p>
                 </div>
-                <span className="settings-arrow">➔</span>
+                <span className="settings-arrow">  
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </span>
               </div>
 
               <hr className="settings-menu-divider" />
 
               <button type="button" className="btn-menu-logout-danger" onClick={logout}>
-                Sair (Logout)
+                <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                Sair
+
               </button>
 
             </div>

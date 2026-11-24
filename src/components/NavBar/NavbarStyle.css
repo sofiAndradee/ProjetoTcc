@@ -101,127 +101,128 @@ a {
     border: 1px solid #dbdcdd;
 
 }
+
 /* ===== Avatar + dropdown (sem !important) =====
    Em vez de !important, todas as regras começam com .avatar-wrap.
    Isso aumenta a especificidade e vence regras globais como
    `button { ... }`, `hr { ... }` ou `.navbar button { ... }`. */
 
 .avatar-wrap {
-  position: relative; /* âncora do menu */
-  display: inline-flex;
+    position: relative;
+    /* âncora do menu */
+    display: inline-flex;
 }
 
 .avatar-wrap .avatar {
-  box-sizing: border-box;
-  margin: 10px;
-  padding: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6b3fa0, #8e5ac9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #fff;
-  cursor: pointer;
-  overflow: hidden;
+    box-sizing: border-box;
+    margin: 10px;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  background: linear-gradient(140deg, #432863 0%, #8e5ac9 100%) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .avatar-wrap .avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* ---------- Menu ---------- */
 
 .avatar-wrap .navbar-dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 10px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  width: 210px;
-  max-width: calc(100vw - 20px);
-  padding: 8px 0;
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  text-align: left;
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    width: 210px;
+    max-width: calc(100vw - 20px);
+    padding: 8px 0;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: left;
 }
 
 .avatar-wrap .navbar-dropdown-user-info {
-  display: flex;
-  flex-direction: column;
-  padding: 6px 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 16px;
 }
 
 .avatar-wrap .nav-user-name {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #c9d1d9;
+    font-size: 0.90rem;
+    font-weight: 700;
+    color: #c9d1d9;
 }
 
-.avatar-wrap .nav-user-email {
-  font-size: 0.75rem;
-  color: #8b949e;
-}
 
 .avatar-wrap .navbar-dropdown-menu hr {
-  width: 100%;
-  margin: 6px 0;
-  border: 0;
-  border-top: 1px solid #21262d;
+    width: 100%;
+    margin: 6px 0;
+    border: 0;
+    border-top: 1px solid #21262d;
 }
 
 /* ---------- Botões do menu ---------- */
 
 .avatar-wrap .navbar-dropdown-menu button {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  padding: 10px 16px;
-  background: none;
-  border: none;
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-align: left;
-  color: #c9d1d9;
-  cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: left;
+    color: #c9d1d9;
+    cursor: pointer;
 }
+
 .avatar-wrap .navbar-dropdown-menu button svg {
-  width: 16px;
-  height: 16px;
-  
+    width: 16px;
+    height: 16px;
+
 }
+
 .avatar-wrap .navbar-dropdown-menu button:hover,
 .avatar-wrap .navbar-dropdown-menu button:focus-visible {
-  background: #161b22;
+    background: #161b22;
 }
 
 .avatar-wrap .navbar-dropdown-menu .nav-menu-signout:hover,
 .avatar-wrap .navbar-dropdown-menu .nav-menu-signout:focus-visible {
-  background: rgba(248, 81, 73, 0.1);
+    background: rgba(248, 81, 73, 0.1);
 }
 
 
 .mobile-menu {
-  display: none;
-  transition: opacity 0.4s ease;
-  background-color: var(--bg);
+    display: none;
+    transition: opacity 0.4s ease;
+    background-color: var(--bg);
 }
 
 .mobile-menu-icon {
-  display: none;
+    display: none;
 }
+
 .mobile-menu {
     display: none;
     transition: opacity 0.4s ease;
@@ -269,6 +270,7 @@ a {
     top: 0;
     z-index: 10;
     border: 1px solid #ffffff49;
+
 }
 
 .search-icon:hover {
@@ -277,7 +279,6 @@ a {
 
 .search-txt {
     border-radius: 40px;
-    border: none;
     background: none;
     outline: none;
     color: #f0f5fb;
@@ -288,6 +289,7 @@ a {
     width: 0;
     padding: 0;
     min-width: 0;
+    border: none;
 
 }
 
@@ -297,7 +299,7 @@ a {
     padding: 0 6px;
 }
 
-.search-btn { 
+.search-btn {
     width: 40px;
     height: 40px;
     border-radius: 50%;

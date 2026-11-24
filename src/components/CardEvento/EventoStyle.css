@@ -1,21 +1,22 @@
 .evento-card {
-  border: 2px solid transparent;
-  background: var(--bg-card);
-  transition: border-color 0.2s ease;
+  border: 1px solid #333333;
+  background: #1c1c1c;
+  transition: transform 0.1s ease, border-color 0.2s, ease background 0.2 ease;
   border-radius: 16px;
   padding: 28px 32px;
-  margin-top: 20px;
+  margin: 20px;
 }
 
 .evento-card:hover {
+  transform: translateY(-2px);
+  border-color: #43009A;
   background-color: #161616;
-  border: solid #43009A;
 }
 
 .tag {
   display: inline-block;
-  background: #a45fff19;;
-  color: #a45fff;;
+  background: #a45fff19;
+  color: #a45fff;
   font-size: 0.8rem;
   font-weight: 700;
   padding: 6px 14px;
@@ -48,7 +49,7 @@
 
 
 
-@media (max-width: 768px){
+@media (max-width: 768px) {
 
   .evento-card {
     padding: 22px;

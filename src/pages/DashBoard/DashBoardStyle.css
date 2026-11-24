@@ -43,19 +43,22 @@
     font-size: 0.9rem;
 }
 
-.btn-logout {
+.btn-voltar {
     padding: 8px 16px;
-    border: none;
+    border: 1px solid #ffffff49;
     border-radius: 8px;
-    background: #ef4444;
+    background: transparent;
     color: #ffffff;
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5;
+    text-align: center;
     text-transform: uppercase;
     cursor: pointer;
+    transition: background  0.3s ease;
 }
 
-.btn-logout:hover { background: #dc2626; }
+.btn-voltar:hover { background:  rgba(255, 255, 255, 0.1); border-color: #43009A; }
 
 /* Cards que também funcionam como abas */
 .stats-grid {

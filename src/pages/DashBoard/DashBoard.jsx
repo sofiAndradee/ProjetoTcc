@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./DashBoardStyle.css";
 import { useAuth } from "../../context/AuthContext";
@@ -228,8 +228,8 @@ export default function Dashboard() {
               <h1>Painel Administrativo</h1>
               <p className="admin-subtitulo">Gerenciamento interno da Comuna Esportes</p>
             </div>
-            <button type="button" onClick={logout} className="btn-logout">
-              <i className="fas fa-sign-out-alt"></i> Sair
+            <button type="button" className="btn-voltar"onClick={() => navigate("/Perfil")}>
+               Area de Perfil
             </button>
           </div>
 
