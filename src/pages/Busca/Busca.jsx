@@ -142,9 +142,12 @@ export default function Busca() {
       {termo && carregando && <p className="busca-aviso" role="status">Buscando…</p>}
 
       {termo && erro && (
-        <p className="busca-aviso busca-erro" role="alert">
-          Não foi possível carregar os resultados agora. Tente novamente em instantes.
-        </p>
+        <div className="busca-erro-card" role="alert">
+          <h2 className="busca-erro-titulo">Não foi possível carregar os resultados</h2>
+          <p className="busca-erro-texto">
+             Tente novamente em instantes.
+          </p>
+        </div>
       )}
 
       {termo && !carregando && !erro && (
@@ -185,7 +188,7 @@ export default function Busca() {
                 <h2>
                   {s.titulo} <span className="busca-contador">{s.itens.length}</span>
                 </h2>
-                
+
                 <div className={s.tipo === "projeto" ? "busca-grade busca-grade-projetos" : "busca-grade"}>
                   {s.itens.map((item) =>
                     s.tipo === "projeto"

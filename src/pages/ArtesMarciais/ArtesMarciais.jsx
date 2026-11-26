@@ -14,7 +14,7 @@ export default function ArtesMarciais() {
     <div className="esporte-page">
       <section className="hero-esporte">
         <h1 className="hero-title-esporte">Artes Marciais</h1>
-        <p>Conecte-se com os dojôs comunitários, treinos de Jiu-Jitsu, Capoeira e Boxe que promovem respeito e acolhimento social às nossas crianças.</p>
+        <p>Treinos de Jiu-Jitsu, Capoeira e Boxe que promovem respeito e acolhimento social às nossas crianças.</p>
       </section>
 
       <div className="page-section-esporte">

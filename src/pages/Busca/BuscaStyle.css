@@ -29,13 +29,32 @@
 }
 
 .busca-aviso {
-  margin-top: 24px;
   color: var(--text-dim);
 }
 
-.busca-erro {
-  color: #ff7b72;
+.busca-erro-card {
+  text-align: center;
+  margin-top: 40px;
+  padding: 40px 24px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
 }
+
+.busca-erro-titulo {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.busca-erro-texto {
+  margin: 0 0 20px;
+  font-size: 0.9rem;
+  color: #b5b5b5;
+}
+
+
 
 /* ---- abas ---- */
 .busca-abas {
