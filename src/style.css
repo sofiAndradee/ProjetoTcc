@@ -13,31 +13,37 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-
 }
 
+html {
+  min-height: 100%;
+  background: var(--bg); /* evita faixa de cor diferente se o body não cobrir tudo */
+}
 
 body {
-   
- 
+  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
   font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  background-image: 
-                radial-gradient(circle at 10% 20%, rgba(128, 12, 237, 0.07) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(116, 13, 234, 0.095) 0%, transparent 40%);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(128, 12, 237, 0.07) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(116, 13, 234, 0.095) 0%, transparent 40%);
+  background-attachment: fixed; /* o degradê cobre a tela toda, mesmo com pouco conteúdo */
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.conteudo {
+  flex: 1; /* ocupa o espaço livre e empurra o footer para o fim da tela */
 }
 
 a {
   color: inherit;
   text-decoration: none;
 }
-
-/* DESTAQUE */
-
-
-/* RESPONSIVE */
-
-
-
-

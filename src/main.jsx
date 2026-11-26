@@ -30,7 +30,8 @@ createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
     <Navbar/>
-    <Routes>
+    <main className="conteudo">
+       <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='/Local' element={<Local/>}/>
       <Route path='/Noticia' element={<Noticia/>}/>
@@ -71,6 +72,8 @@ createRoot(document.getElementById('root')).render(
 
       }/>
     </Routes>
+
+    </main>
     <Footer/>
     </AuthProvider>
 
