@@ -1,4 +1,8 @@
-# React + Vite
+# COMUNA ESPORTES 
+## Visão geral 
+
+`O comuna Esportes é um site para divulgar projetos esportivos gratuito ou de baixo custo. Qualquer pessoa pode ver os locais; quem tem com conta pode increver um projeto, e o admininistrador aprova ou recusa cada projeto`
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
