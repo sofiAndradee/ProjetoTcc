@@ -312,7 +312,7 @@ a {
 
 /*  Responsividade */
 
-@media (max-width: 950px) {
+@media (max-width: 1500px) {
 
     .nav-bar {
         display: grid;
