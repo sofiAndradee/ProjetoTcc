@@ -53,9 +53,6 @@ export default function Cadastro() {
     }
 
 
-    console.log({ nome, sobrenome, email });
-
-
   try {
     const nomeCompleto = `${nome} ${sobrenome}`.trim();
 

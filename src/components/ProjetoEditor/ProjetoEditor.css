@@ -221,7 +221,7 @@
 
 .pe-modal {
   width: 100%;
-  max-width: 440px;
+  max-width: 800px;
   max-height: 92vh;
   overflow: auto;
   background: var(--pe-card);
@@ -289,6 +289,8 @@
 
 .pe-modal input[type="text"],
 .pe-modal input[type="date"],
+.pe-modal input[type="time"],
+.pe-modal input[type="number"],
 .pe-modal textarea {
   width: 100%;
   background: var(--pe-inp);
@@ -324,7 +326,7 @@
 .pe-chip {
   font-size: 11px;
   padding: 4px 10px;
-  border-radius: 99px;
+  border-radius: 10px;
   border: 1px solid var(--pe-line);
   background: var(--pe-bg);
   color: var(--pe-mut);
@@ -333,7 +335,6 @@
 .pe-chip[aria-pressed="true"] {
   border-color: var(--pe-pri);
   color: var(--pe-pri);
-  background: var(--pe-pri-bg);
 }
 
 .pe-publish {
@@ -364,4 +365,43 @@
 .pe-overlay textarea:focus-visible {
   outline: 2px solid var(--pe-pri);
   outline-offset: 2px;
+}
+
+/* Botão "Editar dados" (aba Dados) */
+.pe-dados-top {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.pe-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--pe-pri);
+  background: var(--pe-pri-bg);
+  color: var(--pe-pri);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pe-edit-btn:hover {
+  background: var(--pe-pri);
+  color: #fff;
+}
+
+/* Linha com dois campos lado a lado (horário, idades) */
+.pe-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pe-chips-form {
+  margin-top: 0;
+  align-items: center;
+  justify-content: center;
+  
 }

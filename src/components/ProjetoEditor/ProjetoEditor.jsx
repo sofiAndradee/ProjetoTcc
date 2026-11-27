@@ -8,6 +8,7 @@ import { verificarCampos } from "../../utils/moderacao";
 import "./ProjetoEditor.css";
 
 const FAIXAS = ["Criança (até 12)", "Jovem (13–17)", "Adulto (18+)", "Todas as idades"];
+const DIAS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
 
 const formatarData = (iso) => (iso ? new Date(`${iso}T12:00:00`).toLocaleDateString("pt-BR") : "");
 
@@ -147,13 +148,189 @@ function ModalPublicacao({ inicial, onFechar, onSalvar }) {
   );
 }
 
+/* ------------------------- Modal de edição dos dados do projeto ------------------------- */
+function ModalDadosProjeto({ projeto, onFechar, onSalvar }) {
+  const [inicioAtual = "", fimAtual = ""] = (projeto.hora_fun || "").split("-");
+
+  const [nome, setNome] = useState(projeto.nome ?? "");
+  const [local, setLocal] = useState(projeto.local ?? "");
+  const [descricao, setDescricao] = useState(projeto.descricao ?? "");
+  const [horaInicio, setHoraInicio] = useState(inicioAtual);
+  const [horaFim, setHoraFim] = useState(fimAtual);
+  const [idadeMin, setIdadeMin] = useState(projeto.idade_minima ?? "");
+  const [idadeMax, setIdadeMax] = useState(projeto.idade_maxima ?? "");
+  const [dias, setDias] = useState(
+    (projeto.dias_funcionamento || "").split(",").map((d) => d.trim()).filter(Boolean)
+  );
+  const [catalogo, setCatalogo] = useState([]);
+  const [ids, setIds] = useState([]);
+  const [erros, setErros] = useState({});
+  const [salvando, setSalvando] = useState(false);
+  const nomeRef = useRef(null);
+
+  useEffect(() => {
+    nomeRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onFechar();
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onFechar]);
+
+  // Carrega as modalidades do banco e já marca as que o projeto tem hoje
+  useEffect(() => {
+    let ativo = true;
+    fetch(`${API}/modalidades`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!ativo) return;
+        const lista = d.dados || [];
+        setCatalogo(lista);
+        setIds(lista.filter((c) => projeto.modalidades?.includes(c.modalidade)).map((c) => c.id_mod));
+      })
+      .catch(() => ativo && setErros({ geral: "Não foi possível carregar as modalidades." }));
+    return () => {
+      ativo = false;
+    };
+  }, [projeto.modalidades]);
+
+  const alternar = (lista, setLista, valor) =>
+    setLista(lista.includes(valor) ? lista.filter((x) => x !== valor) : [...lista, valor]);
+
+  async function salvar() {
+    const min = Number(idadeMin);
+    const max = Number(idadeMax);
+    const novos = {};
+
+    if (!nome.trim()) novos.nome = "Informe o nome do projeto.";
+    if (!local.trim()) novos.local = "Informe o local.";
+    if (!descricao.trim()) novos.descricao = "Informe a descrição.";
+    if (ids.length === 0) novos.modalidades = "Selecione pelo menos uma modalidade.";
+    if (dias.length === 0) novos.dias = "Selecione pelo menos um dia.";
+    if (!horaInicio || !horaFim || horaFim <= horaInicio) novos.horario = "O término deve ser depois do início.";
+    if (idadeMin === "" || idadeMax === "" || !Number.isInteger(min) || !Number.isInteger(max) || min < 0 || max > 100 || min > max) {
+      novos.idade = "Faixa etária inválida.";
+    }
+
+    // Moderação de palavras (resposta rápida; o servidor confere de novo)
+    Object.assign(novos, verificarCampos({ nome, local, descricao }));
+
+    setErros(novos);
+    if (Object.keys(novos).length) return;
+
+    try {
+      setSalvando(true);
+      await onSalvar({
+        nome: nome.trim(),
+        local: local.trim(),
+        descricao: descricao.trim(),
+        idade_minima: min,
+        idade_maxima: max,
+        hora_inicio: horaInicio,
+        hora_fim: horaFim,
+        dias_funcionamento: DIAS.filter((d) => dias.includes(d)).join(", "),
+        modalidades: ids,
+      });
+      onFechar();
+    } catch (e) {
+      setErros({ ...(e.campos || {}), geral: e.campos ? undefined : e.message });
+    } finally {
+      setSalvando(false);
+    }
+  }
+
+  const cls = (campo) => (erros[campo] ? "invalid" : undefined);
+
+  return (
+    <div className="pe-overlay" onMouseDown={(e) => e.target === e.currentTarget && onFechar()}>
+      <div className="pe-modal" role="dialog" aria-modal="true" aria-labelledby="pe-dados-titulo">
+        <div className="pe-modal-head">
+          <span id="pe-dados-titulo">Editar dados do projeto</span>
+          <button type="button" onClick={onFechar} aria-label="Fechar">
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        </div>
+
+        <div className="pe-modal-body">
+          <label htmlFor="pe-nome">Nome do projeto</label>
+          <input id="pe-nome" ref={nomeRef} type="text" className={cls("nome")} value={nome} maxLength={120} onChange={(e) => setNome(e.target.value)} />
+          {erros.nome && <div className="pe-error">{erros.nome}</div>}
+
+          <label id="pe-mod-label">Modalidades</label>
+          <div className="pe-chips pe-chips-form" role="group" aria-labelledby="pe-mod-label">
+            {catalogo.map((m) => (
+              <button key={m.id_mod} type="button" className="pe-chip" aria-pressed={ids.includes(m.id_mod)} onClick={() => alternar(ids, setIds, m.id_mod)}>
+                {m.modalidade}
+              </button>
+            ))}
+          </div>
+          {erros.modalidades && <div className="pe-error">{erros.modalidades}</div>}
+
+          <label htmlFor="pe-local-proj">Local</label>
+          <input id="pe-local-proj" type="text" className={cls("local")} value={local} maxLength={200} onChange={(e) => setLocal(e.target.value)} />
+          {erros.local && <div className="pe-error">{erros.local}</div>}
+
+          <label id="pe-dias-label">Dias de funcionamento</label>
+          <div className="pe-chips pe-chips-form" role="group" aria-labelledby="pe-dias-label">
+            {DIAS.map((d) => (
+              <button key={d} type="button" className="pe-chip" aria-pressed={dias.includes(d)} onClick={() => alternar(dias, setDias, d)}>
+                {d}
+              </button>
+            ))}
+          </div>
+          {erros.dias && <div className="pe-error">{erros.dias}</div>}
+
+          <div className="pe-row">
+            <div>
+              <label htmlFor="pe-hora-ini">Início</label>
+              <input id="pe-hora-ini" type="time" className={cls("horario")} value={horaInicio} onChange={(e) => setHoraInicio(e.target.value)} />
+            </div>
+            <div>
+              <label htmlFor="pe-hora-fim">Término</label>
+              <input id="pe-hora-fim" type="time" className={cls("horario")} value={horaFim} onChange={(e) => setHoraFim(e.target.value)} />
+            </div>
+          </div>
+          {erros.horario && <div className="pe-error">{erros.horario}</div>}
+
+          <div className="pe-row">
+            <div>
+              <label htmlFor="pe-idade-min">Idade mínima</label>
+              <input id="pe-idade-min" type="number" min="0" max="100" className={cls("idade")} value={idadeMin} onChange={(e) => setIdadeMin(e.target.value)} />
+            </div>
+            <div>
+              <label htmlFor="pe-idade-max">Idade máxima</label>
+              <input id="pe-idade-max" type="number" min="0" max="100" className={cls("idade")} value={idadeMax} onChange={(e) => setIdadeMax(e.target.value)} />
+            </div>
+          </div>
+          {erros.idade && <div className="pe-error">{erros.idade}</div>}
+
+          <label htmlFor="pe-desc-proj">Descrição</label>
+          <textarea id="pe-desc-proj" className={cls("descricao")} value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+          {erros.descricao && <div className="pe-error">{erros.descricao}</div>}
+
+          {erros.geral && <div className="pe-error">{erros.geral}</div>}
+
+          <div className="pe-publish">
+            <button type="button" onClick={salvar} disabled={salvando}>
+              {salvando ? "Salvando…" : "Salvar alterações"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------ Área de edição do projeto ------------------------------ */
-export default function ProjetoEditor({ projeto, onVoltar }) {
+export default function ProjetoEditor({ projeto, onVoltar, onAtualizado }) {
   const [aba, setAba] = useState("pubs");
   const [lista, setLista] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erroLista, setErroLista] = useState("");
   const [modal, setModal] = useState(null); // null | { inicial?: publicacao }
+  const [atual, setAtual] = useState(projeto); // dados do projeto (atualizados após editar)
+  const [modalDados, setModalDados] = useState(false);
 
   const carregar = useCallback(async () => {
     try {
@@ -178,6 +355,12 @@ export default function ProjetoEditor({ projeto, onVoltar }) {
     setLista((l) => (editando ? l.map((p) => (p.id_pub === item.id_pub ? json.dados : p)) : [json.dados, ...l]));
   }
 
+  async function salvarDados(corpo) {
+    const json = await requisitar(`${API}/projetos/${atual.id_proj}`, { method: "PUT", body: JSON.stringify(corpo) });
+    setAtual(json.dados);
+    onAtualizado?.(json.dados); // avisa a tela do perfil para atualizar a lista
+  }
+
   async function excluir(pub) {
     if (!window.confirm(`Excluir "${pub.titulo}"?`)) return;
     try {
@@ -195,7 +378,7 @@ export default function ProjetoEditor({ projeto, onVoltar }) {
       </div>
 
       <div className="pe-head">
-        <h2>{projeto.nome || projeto.local}</h2>
+        <h2>{atual.nome || atual.local}</h2>
       </div>
 
       <div className="pe-tabs" role="tablist">
@@ -204,14 +387,21 @@ export default function ProjetoEditor({ projeto, onVoltar }) {
       </div>
 
       {aba === "dados" && (
-        <dl className="pe-dados">
-          <div><dt>Modalidades</dt><dd>{projeto.modalidades?.join(", ") || "—"}</dd></div>
-          <div><dt>Local</dt><dd>{projeto.local}</dd></div>
-          <div><dt>Horário</dt><dd>{projeto.hora_fun ? projeto.hora_fun.replace("-", " às ") : "—"}</dd></div>
-          <div><dt>Dias</dt><dd>{projeto.dias_funcionamento || "—"}</dd></div>
-          <div><dt>Faixa etária</dt><dd>{projeto.idade_minima} a {projeto.idade_maxima} anos</dd></div>
-          {projeto.descricao && <div><dt>Descrição</dt><dd>{projeto.descricao}</dd></div>}
-        </dl>
+        <>
+          <div className="pe-dados-top">
+            <button type="button" className="pe-edit-btn" onClick={() => setModalDados(true)}>
+              <FontAwesomeIcon icon={faPenToSquare} /> Editar dados
+            </button>
+          </div>
+          <dl className="pe-dados">
+            <div><dt>Modalidades</dt><dd>{atual.modalidades?.join(", ") || "—"}</dd></div>
+            <div><dt>Local</dt><dd>{atual.local}</dd></div>
+            <div><dt>Horário</dt><dd>{atual.hora_fun ? atual.hora_fun.replace("-", " às ") : "—"}</dd></div>
+            <div><dt>Dias</dt><dd>{atual.dias_funcionamento || "—"}</dd></div>
+            <div><dt>Faixa etária</dt><dd>{atual.idade_minima} a {atual.idade_maxima} anos</dd></div>
+            {atual.descricao && <div><dt>Descrição</dt><dd>{atual.descricao}</dd></div>}
+          </dl>
+        </>
       )}
 
       {aba === "pubs" && (
@@ -247,6 +437,7 @@ export default function ProjetoEditor({ projeto, onVoltar }) {
       )}
 
       {modal && <ModalPublicacao inicial={modal.inicial} onFechar={() => setModal(null)} onSalvar={salvar} />}
+      {modalDados && <ModalDadosProjeto projeto={atual} onFechar={() => setModalDados(false)} onSalvar={salvarDados} />}
     </div>
   );
 }

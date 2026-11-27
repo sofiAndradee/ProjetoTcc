@@ -12,7 +12,7 @@ import "./LoginStyle.css"
 function Login() {
 
 
-  
+
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
@@ -23,44 +23,44 @@ function Login() {
     e.preventDefault();
     setErro("");
 
-  try {
-    const res = await fetch(`${API}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, senha }),
-    });
+    try {
+      const res = await fetch(`${API}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, senha }),
+      });
 
-    const texto = await res.text();
+      const texto = await res.text();
 
-    if (!texto) {
-      throw new Error("O servidor retornou uma resposta vazia.");
+      if (!texto) {
+        throw new Error("O servidor retornou uma resposta vazia.");
+      }
+
+      const data = JSON.parse(texto);
+
+      if (!res.ok) {
+        throw new Error(data.mensagem || `Erro HTTP ${res.status}`);
+      }
+
+      if (!data.sucesso) {
+        setErro(data.mensagem || "E-mail ou senha incorretos.");
+        return;
+      }
+
+      login(data.token);
+      navigate("/");
+
+    } catch (erro) {
+      console.error("Erro no login:", erro);
+      setErro(erro.message || "Erro ao conectar com o servidor");
     }
-
-    const data = JSON.parse(texto);
-
-    if (!res.ok) {
-      throw new Error(data.mensagem || `Erro HTTP ${res.status}`);
-    }
-
-    if (!data.sucesso) {
-      setErro(data.mensagem || "E-mail ou senha incorretos.");
-      return;
-    }
-
-    login(data.token);
-    navigate("/");
-
-  } catch (err) {
-    console.error("Erro no login:", err);
-    setErro(err.message || "Erro ao conectar com o servidor");
-  }
   };
 
   return (
     <>
-      
+
 
 
 
@@ -72,7 +72,7 @@ function Login() {
             <img className="imagem-logo" src={logo} alt="" />
           </div>
 
-          <form  onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="usuario">Usuário ou E-mail</label>
               <div className="input-wrapper">
@@ -84,7 +84,6 @@ function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
-                <i className="fas fa-user"></i>
               </div>
             </div>
 
@@ -99,7 +98,6 @@ function Login() {
                   onChange={(e) => setSenha(e.target.value)}
                   required
                 />
-                <i className="fas fa-lock"></i>
               </div>
             </div>
             {erro && <p style={{ color: "red" }}>{erro}</p>}

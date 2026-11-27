@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./DashBoardStyle.css";
 import { useAuth } from "../../context/AuthContext";
@@ -56,12 +56,10 @@ export default function Dashboard() {
   const [grupos, setGrupos] = useState([]);
   const [carregandoGrupos, setCarregandoGrupos] = useState(true);
   const [erroGrupos, setErroGrupos] = useState("");
-  const [catalogo, setCatalogo] = useState([]); // modalidades do banco (para o modal de edição)
   const [solicitacoes, setSolicitacoes] = useState([]);
   const [carregandoSolic, setCarregandoSolic] = useState(true);
   const [erroSolic, setErroSolic] = useState("");
   const [aba, setAba] = useState("ativos"); // "ativos" | "solicitacoes"
-  const [editando, setEditando] = useState(null); // grupo sendo editado (cópia)
   const [propostaAberta, setPropostaAberta] = useState(null); // solicitação sendo analisada
     const {  logout } = useAuth();
 
@@ -70,7 +68,6 @@ export default function Dashboard() {
   useEffect(() => {
     function aoApertarTecla(e) {
       if (e.key === "Escape") {
-        setEditando(null);
         setPropostaAberta(null);
       }
     }
@@ -111,52 +108,6 @@ export default function Dashboard() {
     }
   }
 
-  function handleChangeEdicao(e) {
-    const { name, value } = e.target;
-    setEditando((anterior) => ({ ...anterior, [name]: value }));
-  }
-
-  // Abre o modal já com as modalidades atuais do grupo marcadas
-  function abrirEdicao(grupo) {
-    const ids = catalogo.filter((c) => grupo.modalidades.includes(c.modalidade)).map((c) => c.id_mod);
-    setEditando({ ...grupo, ids });
-  }
-
-  function toggleModalidadeEdicao(id) {
-    setEditando((anterior) => ({
-      ...anterior,
-      ids: anterior.ids.includes(id) ? anterior.ids.filter((x) => x !== id) : [...anterior.ids, id],
-    }));
-  }
-
-  async function salvarEdicao(e) {
-    e.preventDefault();
-    if (editando.ids.length === 0) {
-      alert("Selecione pelo menos uma modalidade.");
-      return;
-    }
-    try {
-      const resp = await fetch(`${API}/projetos/${editando.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", ...cabecalhoAuth() },
-        body: JSON.stringify({
-          nome: editando.nome,
-          local: editando.localizacao,
-          modalidades: editando.ids,
-        }),
-      });
-      const dados = await resp.json();
-      if (!resp.ok) {
-        alert(dados.mensagem || "Não foi possível salvar as alterações.");
-        return;
-      }
-      await carregarGrupos();
-      setEditando(null);
-    } catch {
-      alert("Erro de conexão com o servidor.");
-    }
-  }
-
   // ---------- Solicitações (vindas do banco) ----------
   async function carregarSolicitacoes() {
     setCarregandoSolic(true);
@@ -176,10 +127,6 @@ export default function Dashboard() {
   useEffect(() => {
     carregarSolicitacoes();
     carregarGrupos();
-    fetch(`${API}/modalidades`)
-      .then((r) => r.json())
-      .then((d) => setCatalogo(d.dados || []))
-      .catch(() => {});
   }, []);
 
   // Envia a decisão ao back-end. Devolve true se deu certo.
@@ -307,13 +254,6 @@ export default function Dashboard() {
                         <td>
                           <button
                             type="button"
-                            onClick={() => abrirEdicao(grupo)}
-                            className="btn-action-text btn-edit-text"
-                          >
-                            Editar
-                          </button>
-                          <button
-                            type="button"
                             onClick={() => excluirGrupo(grupo.id)}
                             className="btn-action-text btn-delete-text"
                           >
@@ -397,73 +337,6 @@ export default function Dashboard() {
           )}
         </div>
       </main>
-
-      {/* MODAL DE EDIÇÃO */}
-      {editando && (
-        <div className="modal-overlay" onClick={() => setEditando(null)}>
-          <div
-            className="modal-box"
-            role="dialog"
-            aria-modal="true"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="modal-titulo">Editar Grupo</h2>
-
-            <form onSubmit={salvarEdicao}>
-              <div className="form-group">
-                <label htmlFor="editNome">Nome do Grupo</label>
-                <input
-                  type="text"
-                  id="editNome"
-                  name="nome"
-                  value={editando.nome}
-                  onChange={handleChangeEdicao}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Modalidades</label>
-                {catalogo.map((m) => (
-                  <label
-                    key={m.id_mod}
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, marginRight: 14, textTransform: "none", fontSize: "0.9rem" }}
-                  >
-                    <input
-                      type="checkbox"
-                      style={{ width: "auto", padding: 0 }}
-                      checked={editando.ids.includes(m.id_mod)}
-                      onChange={() => toggleModalidadeEdicao(m.id_mod)}
-                    />
-                    {m.modalidade}
-                  </label>
-                ))}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="editLocalizacao">Localização</label>
-                <input
-                  type="text"
-                  id="editLocalizacao"
-                  name="localizacao"
-                  value={editando.localizacao}
-                  onChange={handleChangeEdicao}
-                  required
-                />
-              </div>
-
-              <div className="modal-buttons">
-                <button type="button" onClick={() => setEditando(null)} className="btn-cancel">
-                  Cancelar
-                </button>
-                <button type="submit" className="btn-modal-primary">
-                  Salvar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* MODAL: ANALISAR PROPOSTA */}
       {propostaAberta && (

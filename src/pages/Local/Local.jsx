@@ -14,7 +14,7 @@ export const dadosEsportes = [
     faixaEtaria: "Todas as idades",
     local: "São Miguel Paulista",
     telefone: "11 99999-9999",
-    horario: "6:00 - 16:00",
+    horario: "Qua, Qui, Sex • 6:00 - 16:00",
     categoria: "Futebol",
   
   },
@@ -24,7 +24,7 @@ export const dadosEsportes = [
     faixaEtaria: "Jovem e Adulto",
     local: "JD Ângela",
     telefone: "11 99999-9999",
-    horario: "6:00 - 16:00",
+    horario: "Qua, Qui, Sex • 6:00 - 16:00",
     categoria: "Vôlei",
     
   },
@@ -34,7 +34,7 @@ export const dadosEsportes = [
     faixaEtaria: "Crianças e Jovens",
     local: "CD Tiradentes",
     telefone: "11 99999-9999",
-    horario: "6:00 - 16:00",
+    horario: "•  6:00 - 16:00",
     categoria: "Basquete",
     
   },
@@ -44,7 +44,7 @@ export const dadosEsportes = [
     faixaEtaria: "Todas as idades",
     local: "Centro Comunitário",
     telefone: "11 99999-9999",
-    horario: "6:00 - 16:00",
+    horario: "Ter , Sex, Sab • 6:00 - 16:00",
     categoria: "Artes Marciais",
     linkMaps: "https://www.google.com/maps/search/?api=1&query=São+Miguel+Paulista",
     
@@ -55,7 +55,7 @@ export const dadosEsportes = [
     faixaEtaria: "Todas as idades",
     local: "Ceu são Miguel",
     telefone: "11 99999-9999",
-    horario: "6:00 - 16:00",
+    horario: "Seg, Ter, Qui • 6:00 - 16:00",
     categoria: "Artes Marciais",
     linkMaps: "https://www.google.com/maps/search/?api=1&query=Ceu+são+Miguel"
   
