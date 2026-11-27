@@ -1,4 +1,5 @@
-const pool = require("../config/pool.js"); // Declarado apenas UMA VEZ no topo do arquivo!
+const pool = require("../config/pool.js");
+const { verificarCampos } = require("../utils/moderacao.js"); // Declarado apenas UMA VEZ no topo do arquivo!
 
 // =========================================================================
 // 1. POST - CADASTRAR NOVA PROPOSTA DE PROJETO (COM DESCRIÇÃO INCLUSA)
@@ -331,61 +332,119 @@ const listarSolicitacoes = async (req, res) => {
 };
 
 // =========================================================================
-// PUT - EDITAR PROJETO (somente admin): nome, local e modalidades
+// PUT - EDITAR PROJETO (dono do projeto ou admin)
+// Edita: nome, local, modalidades, horário, dias, faixa etária e descrição.
+// O CNPJ e o dono NÃO mudam por aqui.
 // =========================================================================
 const editarProjeto = async (req, res) => {
     const id_proj = Number(req.params.id);
-    const nome = String(req.body?.nome ?? "").trim();
-    const local = String(req.body?.local ?? "").trim();
-    const modalidades = Array.isArray(req.body?.modalidades)
-        ? [...new Set(req.body.modalidades.map(Number))]
-        : [];
-
-    const erros = [];
-    if (!Number.isInteger(id_proj)) erros.push("ID do projeto inválido.");
-    if (!nome || nome.length > 120) erros.push("Informe o nome do projeto (até 120 caracteres).");
-    if (!local || local.length > 200) erros.push("Informe o local (até 200 caracteres).");
-    if (modalidades.length === 0 || modalidades.length > MAX_MODALIDADES || modalidades.some((id) => !Number.isInteger(id))) {
-        erros.push(`Selecione de 1 a ${MAX_MODALIDADES} modalidades.`);
-    }
-    if (erros.length > 0) {
-        return res.status(400).json({ sucesso: false, mensagem: erros[0], erros });
+    if (!Number.isInteger(id_proj) || id_proj <= 0) {
+        return res.status(400).json({ sucesso: false, mensagem: "ID do projeto inválido." });
     }
 
-    const conn = await pool.getConnection();
     try {
-        await conn.beginTransaction();
-
-        const [projetos] = await conn.query("SELECT id_proj FROM Projeto WHERE id_proj = ? AND ativo = true", [id_proj]);
+        // 1. O projeto existe e quem pede é o dono ou um admin?
+        const [projetos] = await pool.query(
+            "SELECT id_proj, id_user FROM Projeto WHERE id_proj = ? AND ativo = true",
+            [id_proj]
+        );
         if (projetos.length === 0) {
-            await conn.rollback();
             return res.status(404).json({ sucesso: false, mensagem: "Projeto não encontrado ou desativado." });
         }
-
-        const [existentes] = await conn.query("SELECT id_mod FROM Modalidades WHERE id_mod IN (?)", [modalidades]);
-        if (existentes.length !== modalidades.length) {
-            await conn.rollback();
-            return res.status(400).json({ sucesso: false, mensagem: "Alguma modalidade selecionada não existe." });
+        if (req.usuario.tipo_acesso !== "admin" && projetos[0].id_user !== req.usuario.id) {
+            return res.status(403).json({ sucesso: false, mensagem: "Você não tem permissão para editar este projeto." });
         }
 
-        // id_mod continua guardando a modalidade principal (a primeira da lista)
-        await conn.query(
-            "UPDATE Projeto SET nome = ?, Local = ?, id_mod = ? WHERE id_proj = ?",
-            [nome, local, modalidades[0], id_proj]
-        );
-        await conn.query("DELETE FROM Projeto_Modalidade WHERE id_proj = ?", [id_proj]);
-        await conn.query(
-            "INSERT INTO Projeto_Modalidade (id_proj, id_mod) VALUES ?",
-            [modalidades.map((id) => [id_proj, id])]
-        );
+        // 2. Validação dos campos
+        const b = req.body || {};
+        const txt = (v) => (typeof v === "string" ? v.trim() : "");
+        const nome = txt(b.nome);
+        const local = txt(b.local);
+        const descricao = txt(b.descricao);
+        const min = Number(b.idade_minima);
+        const max = Number(b.idade_maxima);
+        const dias = txt(b.dias_funcionamento).split(",").map((d) => d.trim()).filter(Boolean);
+        const modalidades = Array.isArray(b.modalidades) ? [...new Set(b.modalidades.map(Number))] : [];
 
-        await conn.commit();
-        res.status(200).json({ sucesso: true, mensagem: "Projeto atualizado com sucesso." });
+        const erros = [];
+        if (!nome || nome.length > 120) erros.push("Informe o nome do projeto (até 120 caracteres).");
+        if (!local || local.length > 200) erros.push("Informe o local das atividades (até 200 caracteres).");
+        if (!descricao) erros.push("Informe a descrição do projeto.");
+        if (!Number.isInteger(min) || !Number.isInteger(max) || min < 0 || max > 100 || min > max) {
+            erros.push("Faixa etária inválida.");
+        }
+        if (!/^\d{2}:\d{2}$/.test(b.hora_inicio || "") || !/^\d{2}:\d{2}$/.test(b.hora_fim || "") || b.hora_fim <= b.hora_inicio) {
+            erros.push("Horário inválido: o término deve ser depois do início.");
+        }
+        if (dias.length === 0 || !dias.every((d) => DIAS_VALIDOS.includes(d))) {
+            erros.push("Selecione pelo menos um dia de funcionamento.");
+        }
+        if (modalidades.length === 0 || modalidades.length > MAX_MODALIDADES || modalidades.some((id) => !Number.isInteger(id))) {
+            erros.push(`Selecione de 1 a ${MAX_MODALIDADES} modalidades.`);
+        }
+        if (erros.length > 0) {
+            return res.status(400).json({ sucesso: false, mensagem: erros[0], erros });
+        }
+
+        // Moderação de palavras: sem ela, o dono poderia trocar o texto depois de aprovado
+        const improprios = verificarCampos({ nome, local, descricao });
+        if (Object.keys(improprios).length > 0) {
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: Object.values(improprios)[0],
+                campos: improprios,
+            });
+        }
+
+        // 3. Grava (projeto + modalidades) em uma transação
+        const conn = await pool.getConnection();
+        try {
+            await conn.beginTransaction();
+
+            const [existentes] = await conn.query("SELECT id_mod FROM Modalidades WHERE id_mod IN (?)", [modalidades]);
+            if (existentes.length !== modalidades.length) {
+                await conn.rollback();
+                return res.status(400).json({ sucesso: false, mensagem: "Alguma modalidade selecionada não existe." });
+            }
+
+            // id_mod continua guardando a modalidade principal (a primeira da lista)
+            await conn.query(
+                `UPDATE Projeto
+                    SET nome = ?, Local = ?, descricao = ?, idade_minima = ?, idade_maxima = ?,
+                        hora_fun = ?, dias_funcionamento = ?, id_mod = ?
+                  WHERE id_proj = ?`,
+                [nome, local, descricao, min, max, `${b.hora_inicio}-${b.hora_fim}`, dias.join(", "), modalidades[0], id_proj]
+            );
+            await conn.query("DELETE FROM Projeto_Modalidade WHERE id_proj = ?", [id_proj]);
+            await conn.query(
+                "INSERT INTO Projeto_Modalidade (id_proj, id_mod) VALUES ?",
+                [modalidades.map((id) => [id_proj, id])]
+            );
+
+            await conn.commit();
+        } catch (error) {
+            await conn.rollback();
+            throw error;
+        } finally {
+            conn.release();
+        }
+
+        // 4. Devolve o projeto atualizado (mesmo formato de /projetos/meus)
+        const [[atualizado]] = await pool.query(
+            `SELECT p.id_proj, p.nome, p.Local AS local, p.hora_fun, p.dias_funcionamento,
+                    p.idade_minima, p.idade_maxima, p.descricao, p.status,
+                    ${SQL_MODALIDADES} AS modalidades
+               FROM Projeto p
+              WHERE p.id_proj = ?`,
+            [id_proj]
+        );
+        res.status(200).json({
+            sucesso: true,
+            mensagem: "Projeto atualizado com sucesso.",
+            dados: { ...atualizado, modalidades: listaModalidades(atualizado.modalidades) },
+        });
     } catch (error) {
-        await conn.rollback();
         res.status(500).json({ sucesso: false, mensagem: "Erro ao atualizar projeto", erro: error.message });
-    } finally {
-        conn.release();
     }
 };
 

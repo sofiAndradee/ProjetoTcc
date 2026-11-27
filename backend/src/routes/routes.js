@@ -26,6 +26,7 @@ router.get("/projetos/meus", verificarToken, projetoController.listarMeusProjeto
 
 
 router.post("/projetos", verificarToken, projetoController.cadastrarProjeto);
+router.put("/projetos/:id", verificarToken, projetoController.editarProjeto);
 router.delete("/projetos/:id", verificarToken, projetoController.deletarProjeto);
 router.put("/projetos/:id/decisao", verificarToken, somenteAdmin,
      projetoController.decidirProposta); 
@@ -42,5 +43,3 @@ router.put("/publicacoes/:id", verificarToken, publicacaoController.editarPublic
 router.delete("/publicacoes/:id", verificarToken, publicacaoController.excluirPublicacao);
 
 module.exports = router;
-
-
