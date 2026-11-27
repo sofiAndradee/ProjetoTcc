@@ -208,12 +208,20 @@
 
 .btn-primary-esporte {
   display: inline-block;
-  background: var(--purple-grad);
-  padding: 14px 35px;
+  background: #232323;
+  border: solid 1px #333;
+  padding: 10px 30px;
   font-weight: 700;
   text-transform: uppercase;
   border-radius: 8px;
   color: #fff;
   font-size: 0.95rem;
   box-shadow: 0 4px 15px var(--purple-glow);
+  transition: border-color 0.2s ease , background 0.2s ease-in;
+}
+
+
+.btn-primary-esporte:hover {
+  border-color: #43009abc;
+  background:none;
 }
