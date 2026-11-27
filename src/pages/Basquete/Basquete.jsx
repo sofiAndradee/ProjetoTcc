@@ -2,14 +2,21 @@ import { Link } from "react-router-dom";
 import "../Futebol/FutebolStyle.css";
 import { dadosEsportes } from "../Local/Local";
 import CardLocal from "../../components/CardLocal/CardLocal";
+import imgFut from "../../assets/imagem_bas.jpg";
 
 export default function Basquete() {
   const lista = dadosEsportes.filter((item) => item.categoria === "Basquete");
   return (
     <div className="esporte-page">
       <section className="hero-esporte">
-        <h1 className="hero-title-esporte">Basquete de Rua</h1>
-        <p>Cole nos principais rachas, circuitos 3x3 e quadras icônicas mapeadas nas comunidades locais e fortaleça o streetball!</p>
+        <img
+          src={imgFut}
+          alt="Imgem com bolas de basquete"
+        />
+        <div className="hero-content">
+          <h1 className="hero-title-esporte">Basquete</h1>
+          <p>Conecte-se aos principais torneios, quadras de referência mapeadas nas comunidades locais.</p>
+        </div>
       </section>
 
       <div className="page-section-esporte">

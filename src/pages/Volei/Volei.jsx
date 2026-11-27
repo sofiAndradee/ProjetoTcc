@@ -2,38 +2,43 @@ import { Link } from "react-router-dom";
 import "../Futebol/FutebolStyle.css";
 import { dadosEsportes } from "../Local/Local";
 import CardLocal from "../../components/CardLocal/CardLocal";
+import imgVolei from "../../assets/imagem_volei.jpg";
+
 export default function Volei() {
-    const lista = dadosEsportes.filter((item) => item.categoria === "Vôlei");
+  const lista = dadosEsportes.filter((item) => item.categoria === "Vôlei");
   return (
     <div className="esporte-page">
       <section className="hero-esporte">
-        <h1 className="hero-title-esporte">Vôlei</h1>
-        <p>Encontre os grupos de vôlei de quadra, vôlei de areia e rachas mistos que integram os moradores aos finais de semana.</p>
+        <img src={imgVolei} alt="" srcset="" />
+        <div className="hero-content">
+          <h1 className="hero-title-esporte">Vôlei</h1>
+          <p>Descubra os grupos de vôlei de quadra, areia e partidas mistas perto de você.</p>
+        </div>
       </section>
 
       <div className="page-section-esporte">
         <main>
           <h2 className="section-title-esporte">Coletivos de Vôlei</h2>
           <div className="lista-grupos-esporte">
-            
-                      {lista.length === 0 ? (
-                      
-                                  <p className="sem-resultados">
-                                    Nenhum local encontrado para esta busca.
-                                  </p>
-                      
-                                ) : (
-                      
-                                  lista.map((item) => (
-                      
-                                    <CardLocal
-                                      key={item.id}
-                                      dados={item}
-                                    />
-                      
-                                  ))
-                      
-                                )}
+
+            {lista.length === 0 ? (
+
+              <p className="sem-resultados">
+                Nenhum local encontrado para esta busca.
+              </p>
+
+            ) : (
+
+              lista.map((item) => (
+
+                <CardLocal
+                  key={item.id}
+                  dados={item}
+                />
+
+              ))
+
+            )}
           </div>
         </main>
 

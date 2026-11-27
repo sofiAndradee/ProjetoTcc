@@ -2,14 +2,19 @@ import { Link } from "react-router-dom";
 import "./FutebolStyle.css";
 import { dadosEsportes } from "../Local/Local";
 import CardLocal from "../../components/CardLocal/CardLocal";
+import imgFut from "../../assets/imagem_fut.jpg";
 
 export default function Futebol() {
   const lista = dadosEsportes.filter((item) => item.categoria === "Futebol");
   return (
     <div className="esporte-page">
+
       <section className="hero-esporte">
-        <h1 className="hero-title-esporte">Futebol da Comunidade</h1>
-        <p>Encontre as quadras, rachas coletivos e times de várzea que movimentam os terrões da nossa quebrada. Fortaleça o esporte local!</p>
+        <img src={ imgFut } alt="" srcset="" />
+        <div className="hero-content">
+          <h1 className="hero-title-esporte">Futebol</h1>
+          <p>Encontre as quadras, rachas coletivos e times de várzea que movimentam os terrões da nossa quebrada. Fortaleça o esporte local!</p>
+        </div>
       </section>
 
       <div className="page-section-esporte">

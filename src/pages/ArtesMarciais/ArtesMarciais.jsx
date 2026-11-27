@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import "../Futebol/FutebolStyle.css";
 import CardLocal from "../../components/CardLocal/CardLocal";
 import { dadosEsportes } from "../Local/Local";
-
+import imgLuta from "../../assets/faixa.png"
 export default function ArtesMarciais() {
 
   const lista = dadosEsportes.filter((item) => item.categoria === "Artes Marciais");
@@ -13,8 +13,11 @@ export default function ArtesMarciais() {
   return (
     <div className="esporte-page">
       <section className="hero-esporte">
-        <h1 className="hero-title-esporte">Artes Marciais</h1>
-        <p>Treinos de Jiu-Jitsu, Capoeira e Boxe que promovem respeito e acolhimento social às nossas crianças.</p>
+        <img src={imgLuta} alt=""  />
+        <div className="hero-content">
+          <h1 className="hero-title-esporte">Artes Marciais</h1>
+          <p>Treinos de Jiu-Jitsu, Capoeira e Boxe que promovem respeito e acolhimento social às nossas crianças.</p>
+        </div>
       </section>
 
       <div className="page-section-esporte">
