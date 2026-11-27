@@ -1,5 +1,7 @@
-node_modules
+**/node_modules
+.git
 .env*
-!.env-exemplo
-*.log
-Dockerfile
+dist
+backend
+database
+*.

@@ -1,5 +1,6 @@
 const pool = require("../config/pool.js");
 const { verificarCampos } = require("../utils/moderacao.js");
+const { erroInterno } = require("../utils/erros.js");
 
 const FAIXAS_VALIDAS = ["Criança (até 12)", "Jovem (13–17)", "Adulto (18+)", "Todas as idades"];
 const SEPARADOR = "|";
@@ -80,8 +81,6 @@ async function projetoPermitido(id_proj, usuario) {
     return { projeto: rows[0] };
 }
 
-const erroInterno = (res, mensagem, error) =>
-    res.status(500).json({ sucesso: false, mensagem, erro: error.message });
 
 // GET /publicacoes  (público) -> alimenta a página de notícias
 const listarPublicas = async (req, res) => {

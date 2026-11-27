@@ -2,7 +2,7 @@ const db = require("../config/pool.js"); // Garanta que o caminho aponta para o 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 10;
-
+const { erroInterno } = require("../utils/erros.js");
 // Gera o token de sessão (usado no login e no cadastro, para o usuário já entrar logado)
 const gerarToken = (usuario) =>
     jwt.sign(
@@ -30,7 +30,7 @@ const ListarUsuarios = async (req, res) => {
             dados: rows
         });
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao listar usuários", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 // =========================================================================
@@ -38,7 +38,7 @@ const ListarUsuarios = async (req, res) => {
 // =========================================================================
 const adicionarUsuario = async (req, res) => {
     try {
-        const { nome, email, telefone, endereco, dt_nasc, senha, tipo_acesso } = req.body;
+        const { nome, email, telefone, endereco, dt_nasc, senha } = req.body || {};
 
         if (!nome || !email || !telefone || !endereco || !dt_nasc || !senha) {
             return res.status(400).json({ sucesso: false, mensagem: "Preencha todos os campos obrigatórios." });
@@ -61,7 +61,7 @@ const adicionarUsuario = async (req, res) => {
 
         res.status(201).json({ sucesso: true, mensagem: "Usuário cadastrado com sucesso!", token });
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: error.message });
+        erroInterno(res, "Erro ao cadastrar usuário", error);
     }
 };
 // =========================================================================
@@ -69,7 +69,7 @@ const adicionarUsuario = async (req, res) => {
 // =========================================================================
 const efetuarLogin = async (req, res) => {
     try {
-        const { email, senha } = req.body;
+        const { email, senha } = req.body || {};
 
         if (!email || !senha) {
             return res.status(400).json({ sucesso: false, mensagem: "E-mail e senha são obrigatórios." });
@@ -104,7 +104,7 @@ const efetuarLogin = async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro interno de autenticação", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 // Exporta as três funções juntas para o arquivo de rotas ler

@@ -1,3 +1,5 @@
+const { erroInterno } = require("../utils/erros.js");
+
 const pool = require("../config/pool.js");
 const { verificarCampos } = require("../utils/moderacao.js"); // Declarado apenas UMA VEZ no topo do arquivo!
 
@@ -113,7 +115,16 @@ const cadastrarProjeto = async (req, res) => {
     if (erros.length > 0) {
         return res.status(400).json({ sucesso: false, mensagem: erros[0], erros });
     }
-
+    // Moderação de palavras (mesma regra do editar e do publicar)
+    const improprios = verificarCampos({
+        nome: dados.nome,
+        local: dados.local,
+        descricao: dados.descricao,
+        outras_modalidades: dados.outras.join(" "),
+    });
+    if (Object.keys(improprios).length > 0) {
+        return res.status(400).json({ sucesso: false, mensagem: Object.values(improprios)[0], campos: improprios });
+    }
     const conn = await pool.getConnection();
     try {
         await conn.beginTransaction();
@@ -156,7 +167,7 @@ const cadastrarProjeto = async (req, res) => {
         });
     } catch (error) {
         await conn.rollback();
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao salvar projeto", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     } finally {
         conn.release();
     }
@@ -191,7 +202,7 @@ const listarProjetos = async (req, res) => {
             telefone: row.telefone,     // <-- Corrigido para minúsculo!
             email: row.email,           // <-- Corrigido para minúsculo!
             descricao: row.descricao || "Sem descrição informada.",
-            status: row.status, 
+            status: row.status,
             modalidade: { nome: row.nome_modalidade },
             modalidades: listaModalidades(row.modalidades),
             outras_modalidades: row.outras_modalidades,
@@ -200,7 +211,7 @@ const listarProjetos = async (req, res) => {
 
         res.status(200).json({ sucesso: true, total: projetosFormatados.length, dados: projetosFormatados });
     } catch (error) {
-        res.status(500).json({ sucesso: false, message: "Erro ao buscar projetos", error: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 
@@ -220,7 +231,7 @@ const listarMeusProjetos = async (req, res) => {
         const dados = rows.map((r) => ({ ...r, modalidades: listaModalidades(r.modalidades) }));
         res.status(200).json({ sucesso: true, total: dados.length, dados });
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao buscar seus projetos", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 
@@ -236,7 +247,7 @@ const deletarProjeto = async (req, res) => {
         }
 
         const [projetos] = await pool.query("SELECT id_proj, id_user FROM Projeto WHERE id_proj = ? AND ativo = true", [id_proj]);
-        
+
         if (projetos.length === 0) {
             return res.status(404).json({ sucesso: false, mensagem: "Projeto não encontrado ou já desativado." });
         }
@@ -253,7 +264,7 @@ const deletarProjeto = async (req, res) => {
             mensagem: "Projeto desativado com sucesso através do Pool!"
         });
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao desativar projeto", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 
@@ -277,7 +288,7 @@ const decidirProposta = async (req, res) => {
             return res.status(200).json({ sucesso: true, mensagem: "Proposta recusada e removida do painel." });
         }
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao processar decisão", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 
@@ -293,7 +304,7 @@ const listarModalidades = async (req, res) => {
         }));
         res.status(200).json({ sucesso: true, dados });
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao buscar modalidades", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 
@@ -327,7 +338,7 @@ const listarSolicitacoes = async (req, res) => {
 
         res.status(200).json({ sucesso: true, total: dados.length, dados });
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao buscar solicitações", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 
@@ -444,7 +455,7 @@ const editarProjeto = async (req, res) => {
             dados: { ...atualizado, modalidades: listaModalidades(atualizado.modalidades) },
         });
     } catch (error) {
-        res.status(500).json({ sucesso: false, mensagem: "Erro ao atualizar projeto", erro: error.message });
+        erroInterno(res, "Erro ao buscar publicações", error);
     }
 };
 
