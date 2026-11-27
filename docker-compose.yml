@@ -38,7 +38,6 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"   # acessível só da sua máquina (para o Workbench/DBeaver)
     volumes:
       - mysql_data:/var/lib/mysql
       # Scripts .sql desta pasta rodam UMA vez, quando o volume está vazio
